@@ -5,22 +5,24 @@ Gem::Specification.new do |spec|
   spec.version     = TrModule::VERSION
   spec.authors     = [ "jtromp" ]
   spec.email       = [ "jtromp@datacollectors.net" ]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of TrModule."
-  spec.description = "TODO: Description of TrModule."
+  spec.homepage    = "https://github.com/datacollectors-net/tr_module"
+  spec.summary     = "Rails engine for iframe-embedded module communication with a host application."
+  spec.description = "TrModule provides host-context authentication, session management, " \
+                     "CSRF-safe iframe embedding, and a Stimulus controller for postMessage-based " \
+                     "communication between a Rails module and its host application."
   spec.license     = "MIT"
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.required_ruby_version = ">= 3.2"
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/datacollectors-net"
+  spec.metadata["homepage_uri"]      = spec.homepage
+  spec.metadata["source_code_uri"]   = "https://github.com/datacollectors-net/tr_module"
+  spec.metadata["changelog_uri"]     = "https://github.com/datacollectors-net/tr_module/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md", "CHANGELOG.md"]
   end
 
   spec.add_dependency "rails", ">= 8.1.3"
+  spec.add_dependency "importmap-rails"
 end
