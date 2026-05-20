@@ -1,0 +1,389 @@
+import { Controller } from "@hotwired/stimulus"
+
+const REFRESH_INTERVAL_MS = 4 * 60 * 1000
+const REFRESH_WAIT_TIMEOUT_MS = 5000
+const CONTEXT_SYNC_RELOADED_KEY = "omnya_connector_context_sync_reloaded"
+
+// If the engine is mounted at a prefix (e.g. mount OmnyaConnector::Engine => "/my_prefix"),
+// adjust this path accordingly (e.g. "/my_prefix/module_context").
+const MODULE_CONTEXT_PATH = "/module_context"
+
+export default class extends Controller {
+  static values = {
+    moduleKey: String,
+    hostOrigins: Array,
+    autonomousUserGuid: String,
+    autonomousTenantId: String
+  }
+
+  static targets = [
+    "connectionStatus",
+    "contextStatus",
+    "userLogin",
+    "tenantName",
+    "errorStatus"
+  ]
+
+  connect() {
+    this.token = null
+    this.contextEndpoint = null
+    this.retryAfterUnauthorized = false
+    this.hostConnected = false
+    this.activeHostOrigin = this.initialHostOrigin()
+    this.refreshTimer = null
+    this.refreshResolver = null
+    this.refreshTimeoutId = null
+    this.contextSyncReloaded = false
+
+    this.initializeContextSyncReloadState()
+
+    this.boundMessageHandler = this.handleMessage.bind(this)
+    this.boundContextUpdated = this.handleContextUpdatedEvent.bind(this)
+    this.boundContextUnavailable = this.handleContextUnavailableEvent.bind(this)
+    this.boundHostConnected = this.handleHostConnectedEvent.bind(this)
+
+    window.addEventListener("message", this.boundMessageHandler)
+    this.element.addEventListener("module:context-updated", this.boundContextUpdated)
+    this.element.addEventListener("module:context-unavailable", this.boundContextUnavailable)
+    this.element.addEventListener("module:host-connected", this.boundHostConnected)
+
+    this.resetPanel()
+    if (!this.embeddedInIframe()) {
+      this.connectionStatusTarget.textContent = "Standalone mode (no host iframe)"
+      this.contextStatusTarget.textContent = "Autonomous context active"
+      this.userLoginTarget.textContent = this.autonomousLabel(this.autonomousUserGuidValue)
+      this.tenantNameTarget.textContent = this.autonomousLabel(this.autonomousTenantIdValue)
+      return
+    }
+
+    this.postToParent("external-module:ready")
+    this.postToParent("external-module:request-context")
+    this.postToParent("external-module:request-theme")
+    this.startRefreshTimer()
+  }
+
+  disconnect() {
+    window.removeEventListener("message", this.boundMessageHandler)
+    this.element.removeEventListener("module:context-updated", this.boundContextUpdated)
+    this.element.removeEventListener("module:context-unavailable", this.boundContextUnavailable)
+    this.element.removeEventListener("module:host-connected", this.boundHostConnected)
+
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer)
+      this.refreshTimer = null
+    }
+
+    if (this.refreshTimeoutId) {
+      clearTimeout(this.refreshTimeoutId)
+      this.refreshTimeoutId = null
+    }
+
+    this.resolveRefresh(false)
+  }
+
+  handleMessage(event) {
+    if (!this.originAllowed(event.origin)) {
+      return
+    }
+
+    const payload = event.data
+    if (!payload) return
+
+    if (payload.moduleKey !== this.moduleKeyValue) return
+
+    if (payload.type === "external-module:theme") {
+      this.applyHostTheme(payload)
+      return
+    }
+
+    if (payload.type !== "external-module:context") {
+      return
+    }
+
+    this.activeHostOrigin = event.origin
+    this.token = payload.token
+    this.contextEndpoint = payload.contextEndpoint
+
+    if (!this.hostConnected) {
+      this.hostConnected = true
+      this.dispatchEvent("module:host-connected", {})
+    }
+
+    this.resolveRefresh(true)
+    this.fetchHostContext({ canRetryOnUnauthorized: true })
+  }
+
+  async fetchHostContext({ canRetryOnUnauthorized }) {
+    if (!this.token || !this.contextEndpoint) {
+      this.dispatchEvent("module:context-unavailable", {
+        message: "Host context is unavailable."
+      })
+      return
+    }
+
+    try {
+      const response = await fetch(this.contextEndpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          Accept: "application/json"
+        },
+        credentials: "omit"
+      })
+
+      if (response.status === 401) {
+        if (canRetryOnUnauthorized && !this.retryAfterUnauthorized) {
+          this.retryAfterUnauthorized = true
+          const refreshed = await this.requestRefreshAndWait()
+
+          if (refreshed) {
+            return this.fetchHostContext({ canRetryOnUnauthorized: false })
+          }
+        }
+
+        this.dispatchEvent("module:context-unavailable", {
+          message: "Authentication is temporarily unavailable."
+        })
+        return
+      }
+
+      if (!response.ok) {
+        this.dispatchEvent("module:context-unavailable", {
+          message: "Host context request failed."
+        })
+        return
+      }
+
+      const context = await response.json()
+      const persisted = await this.persistContextSession()
+      if (!persisted) {
+        this.dispatchEvent("module:context-unavailable", {
+          message: "Host context sync failed."
+        })
+        return
+      }
+
+      this.retryAfterUnauthorized = false
+      this.dispatchEvent("module:context-updated", { context })
+      this.reloadAfterContextSyncIfNeeded()
+    } catch (_error) {
+      this.dispatchEvent("module:context-unavailable", {
+        message: "Host connection is unavailable."
+      })
+    }
+  }
+
+  async requestRefreshAndWait() {
+    this.postToParent("external-module:refresh-context")
+
+    return new Promise((resolve) => {
+      this.refreshResolver = resolve
+
+      this.refreshTimeoutId = setTimeout(() => {
+        this.resolveRefresh(false)
+      }, REFRESH_WAIT_TIMEOUT_MS)
+    })
+  }
+
+  startRefreshTimer() {
+    this.refreshTimer = setInterval(() => {
+      if (!this.hostConnected) {
+        return
+      }
+
+      this.postToParent("external-module:refresh-context")
+    }, REFRESH_INTERVAL_MS)
+  }
+
+  originAllowed(origin) {
+    return this.hostOriginsValue.includes(origin)
+  }
+
+  postToParent(type) {
+    if (!this.embeddedInIframe() || !this.hasModuleKeyValue || !this.moduleKeyValue) {
+      return
+    }
+
+    const payload = {
+      type,
+      moduleKey: this.moduleKeyValue
+    }
+
+    this.postMessageOrigins().forEach((origin) => {
+      try {
+        window.parent.postMessage(payload, origin)
+      } catch (_error) {
+        // Ignore invalid target origin attempts and continue with other candidates.
+      }
+    })
+  }
+
+  embeddedInIframe() {
+    try {
+      return window.parent && window.parent !== window
+    } catch (_error) {
+      return false
+    }
+  }
+
+  initialHostOrigin() {
+    try {
+      const referrerOrigin = new URL(document.referrer).origin
+      return this.originAllowed(referrerOrigin) ? referrerOrigin : null
+    } catch (_error) {
+      return null
+    }
+  }
+
+  postMessageOrigins() {
+    if (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin)) {
+      return [this.activeHostOrigin]
+    }
+
+    const inferredOrigin = this.initialHostOrigin()
+    if (inferredOrigin) {
+      this.activeHostOrigin = inferredOrigin
+      return [inferredOrigin]
+    }
+
+    // During initial iframe handshake the parent origin might not be inferable
+    // (for example due to strict referrer policy). In that case, try allowlisted
+    // origins until the host answers and we can lock onto event.origin.
+    return this.embeddedInIframe() ? this.hostOriginsValue : []
+  }
+
+  autonomousLabel(value) {
+    return value && value.length > 0 ? `autonomous:${value}` : "autonomous:unset"
+  }
+
+  csrfToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.content || ""
+  }
+
+  async persistContextSession() {
+    try {
+      const response = await fetch(MODULE_CONTEXT_PATH, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-CSRF-Token": this.csrfToken()
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+          module_context: {
+            token: this.token,
+            context_endpoint: this.contextEndpoint,
+            module_key: this.moduleKeyValue
+          }
+        })
+      })
+
+      return response.ok
+    } catch (_error) {
+      return false
+    }
+  }
+
+  dispatchEvent(name, detail) {
+    this.element.dispatchEvent(
+      new CustomEvent(name, {
+        bubbles: true,
+        detail
+      })
+    )
+  }
+
+  resolveRefresh(result) {
+    if (this.refreshTimeoutId) {
+      clearTimeout(this.refreshTimeoutId)
+      this.refreshTimeoutId = null
+    }
+
+    if (this.refreshResolver) {
+      this.refreshResolver(result)
+      this.refreshResolver = null
+    }
+  }
+
+  resetPanel() {
+    this.connectionStatusTarget.textContent = "Waiting for host handshake"
+    this.contextStatusTarget.textContent = "Context not loaded yet"
+    this.userLoginTarget.textContent = "unknown"
+    this.tenantNameTarget.textContent = "unknown"
+    this.errorStatusTarget.classList.add("hidden")
+    this.errorStatusTarget.textContent = ""
+  }
+
+  handleHostConnectedEvent() {
+    this.connectionStatusTarget.textContent = "Connected to host"
+  }
+
+  handleContextUpdatedEvent(event) {
+    const context = event.detail.context || {}
+    const userLogin = context.user?.login || "unknown"
+    const tenantName = context.tenant?.name || "unknown"
+    const userGuid = context.user?.guid
+    const tenantId = context.tenant?.id
+
+    this.contextStatusTarget.textContent = "Context loaded"
+    this.userLoginTarget.textContent = this.appendIdLabel(userLogin, userGuid)
+    this.tenantNameTarget.textContent = this.appendIdLabel(tenantName, tenantId)
+    this.errorStatusTarget.classList.add("hidden")
+    this.errorStatusTarget.textContent = ""
+  }
+
+  appendIdLabel(label, id) {
+    return id ? `${label} [${id}]` : label
+  }
+
+  initializeContextSyncReloadState() {
+    this.contextSyncReloaded = this.readContextSyncReloadedFlag()
+  }
+
+  reloadAfterContextSyncIfNeeded() {
+    if (this.contextSyncReloaded) {
+      return
+    }
+
+    this.contextSyncReloaded = true
+    this.writeContextSyncReloadedFlag(true)
+    window.location.reload()
+  }
+
+  readContextSyncReloadedFlag() {
+    try {
+      return window.sessionStorage.getItem(CONTEXT_SYNC_RELOADED_KEY) === "1"
+    } catch (_error) {
+      return false
+    }
+  }
+
+  writeContextSyncReloadedFlag(value) {
+    try {
+      if (value) {
+        window.sessionStorage.setItem(CONTEXT_SYNC_RELOADED_KEY, "1")
+      } else {
+        window.sessionStorage.removeItem(CONTEXT_SYNC_RELOADED_KEY)
+      }
+    } catch (_error) {
+      // Ignore storage limitations and continue without persisted reload state.
+    }
+  }
+
+  handleContextUnavailableEvent(event) {
+    this.contextStatusTarget.textContent = "Context unavailable"
+    this.errorStatusTarget.classList.remove("hidden")
+    this.errorStatusTarget.textContent = event.detail.message || "Authentication is unavailable."
+  }
+
+  applyHostTheme(payload) {
+    if (!payload || payload.type !== "external-module:theme") return
+    if (!["light", "dark", "system"].includes(String(payload.preference || ""))) return
+    if (!["light", "dark"].includes(String(payload.effectiveMode || ""))) return
+
+    document.documentElement.dataset.hostThemePreference = payload.preference
+    document.documentElement.classList.toggle("dark", payload.effectiveMode === "dark")
+    this.dispatchEvent("module:theme-updated", { preference: payload.preference, effectiveMode: payload.effectiveMode })
+  }
+}

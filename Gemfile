@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in tr_module.gemspec.
+# Specify your gem's dependencies in omnya_connector.gemspec.
 gemspec
 
 gem "puma"

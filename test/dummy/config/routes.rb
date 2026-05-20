@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount TrModule::Engine => "/"
+  mount OmnyaConnector::Engine => "/"
 end

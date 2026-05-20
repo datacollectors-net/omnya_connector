@@ -1,3 +1,3 @@
 class ApplicationController < ActionController::Base
-  include TrModule::ControllerConcern
+  include OmnyaConnector::ControllerConcern
 end

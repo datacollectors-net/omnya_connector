@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      RUBY_VERSION: ruby-4.0.1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: Verify tag matches gem version
+        run: |
+          GEM_VERSION=$(ruby -e 'require_relative "lib/omnya_connector/version"; print OmnyaConnector::VERSION')
+          TAG_VERSION=${GITHUB_REF_NAME#v}
+          if [ "$GEM_VERSION" != "$TAG_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match gem version ($GEM_VERSION)"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: bundle exec rake test
+
+      - name: Build gem
+        run: bundle exec rake build
+
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+        run: |
+          if [ -z "$GITHUB_PACKAGES_TOKEN" ]; then
+            echo "GITHUB_PACKAGES_TOKEN secret is not configured"
+            exit 1
+          fi
+          mkdir -p "$HOME/.gem"
+          cat > "$HOME/.gem/credentials" <<EOF
+          ---
+          :github: ${GITHUB_PACKAGES_TOKEN}
+          EOF
+          chmod 0600 "$HOME/.gem/credentials"
+          gem push --key github --host https://rubygems.pkg.github.com/datacollectors-net pkg/omnya_connector-*.gem

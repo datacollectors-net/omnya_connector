@@ -1,3 +1,3 @@
-pin_all_from TrModule::Engine.root.join("app/assets/javascripts/tr_module/controllers"),
+pin_all_from OmnyaConnector::Engine.root.join("app/assets/javascripts/omnya_connector/controllers"),
   under: "controllers",
-  to: "tr_module/controllers"
+  to: "omnya_connector/controllers"
