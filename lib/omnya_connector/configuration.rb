@@ -38,9 +38,9 @@ module OmnyaConnector
       resolved_autonomous_tid   = @autonomous_tenant_id || ENV["AUTONOMOUS_TENANT_ID"]
       resolved_csrf_bypass      = if @allow_trusted_origin_csrf_bypass.nil?
                                     ENV.fetch("ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS", env.development? ? "true" : "false") == "true"
-                                  else
+      else
                                     @allow_trusted_origin_csrf_bypass
-                                  end
+      end
 
       origins = parse_origins(resolved_origins_raw, env)
       validate_production!(origins, resolved_module_key, resolved_explicitly_set, env)
