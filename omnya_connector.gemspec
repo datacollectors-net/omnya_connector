@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
   spec.authors     = [ "jtromp" ]
   spec.email       = [ "jtromp@datacollectors.net" ]
   spec.homepage    = "https://github.com/datacollectors-net/omnya_connector"
-  spec.summary     = "Rails engine for iframe-embedded module communication with a host application."
+  spec.summary     = "Rails engine for iframe-embedded module communication with the Omnya application."
   spec.description = "OmnyaConnector provides host-context authentication, session management, " \
                      "CSRF-safe iframe embedding, and a Stimulus controller for postMessage-based " \
-                     "communication between a Rails module and its host application."
+                     "communication between a Rails module and the Omnya application."
   spec.license     = "MIT"
 
   spec.required_ruby_version = ">= 3.2"

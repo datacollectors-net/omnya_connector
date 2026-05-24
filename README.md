@@ -22,7 +22,6 @@ source "https://rubygems.pkg.github.com/datacollectors-net" do
   gem "omnya_connector"
 end
 ```
-
 Run the install generator:
 
 ```bash
@@ -52,6 +51,8 @@ end
 ```
 
 All settings fall through to ENV variables when not set via the DSL.
+
+**Note:** Integration with the Omnya application host will only work properly in development or production when the application is served with SSL. This is mainly due to modern browser requirements enforcing strict security policies on cookies.
 
 ## Usage
 
