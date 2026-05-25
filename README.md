@@ -54,6 +54,8 @@ All settings fall through to ENV variables when not set via the DSL.
 
 **Note:** Integration with the Omnya application host will only work properly in development or production when the application is served with SSL. This is mainly due to modern browser requirements enforcing strict security policies on cookies.
 
+**Note:** Do not set an `X-Frame-Options` header on module pages. Values like `DENY` or `SAMEORIGIN` will cause browsers to block the page from loading inside the Omnya host iframe. Use `Content-Security-Policy: frame-ancestors` to control which host origins are allowed to embed the module.
+
 ## Usage
 
 ### Controller helpers
