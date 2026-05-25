@@ -52,9 +52,34 @@ end
 
 All settings fall through to ENV variables when not set via the DSL.
 
-**Note:** Integration with the Omnya application host will only work properly in development or production when the application is served with SSL. This is mainly due to modern browser requirements enforcing strict security policies on cookies.
 
-**Note:** Do not set an `X-Frame-Options` header on module pages. Values like `DENY` or `SAMEORIGIN` will cause browsers to block the page from loading inside the Omnya host iframe. Use `Content-Security-Policy: frame-ancestors` to control which host origins are allowed to embed the module.
+## Security Notes: 
+### iframe embedding and CSP
+
+A module is intended to be embedded in a trusted host application iframe.
+
+- Production removes the legacy `X-Frame-Options` response header.
+- Embedding is restricted with CSP `frame-ancestors` to trusted origins.
+- CSP uses per-request nonces for `script-src` so Rails/importmap inline scripts work without `unsafe-inline`.
+
+### X-Frame-options
+Do not set an `X-Frame-Options` header on module pages. Values like `DENY` or `SAMEORIGIN` will cause browsers to block the page from loading inside the Omnya host iframe. Use `Content-Security-Policy: frame-ancestors` to control which host origins are allowed to embed the module.
+
+Quick production checks:
+
+```sh
+curl -sSI https://todos.omnya-app.com/ | rg -i "content-security-policy|x-frame-options"
+curl -sSL https://todos.omnya-app.com/ | rg -n "<script|nonce=|importmap"
+```
+
+Expected result:
+
+- `X-Frame-Options` is absent.
+- `Content-Security-Policy` contains `frame-ancestors` for the trusted host origin.
+- Rendered script tags include `nonce="..."` attributes.
+
+### SSL in development mode
+Integration with the Omnya application host will only work properly in development or production when the application is served with SSL. This is mainly due to modern browser requirements enforcing strict security policies on cookies.
 
 ## Usage
 
