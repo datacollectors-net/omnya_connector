@@ -224,13 +224,15 @@ export default class extends Controller {
       ...extra
     }
 
-    this.postMessageOrigins().forEach((origin) => {
-      try {
-        window.parent.postMessage(payload, origin)
-      } catch (_error) {
-        // Ignore invalid target origin attempts and continue with other candidates.
-      }
-    })
+    // [2026-05-28 11:20] Post only once to the resolved host origin to avoid target-origin mismatch errors from origin fan-out.
+    // [2026-05-28 11:20] Use "*" only during the initial handshake when the exact parent origin is unknown.
+    const targetOrigin = this.postMessageOrigin()
+
+    try {
+      window.parent.postMessage(payload, targetOrigin)
+    } catch (_error) {
+      // Ignore postMessage errors and wait for the next host/module handshake message.
+    }
   }
 
   embeddedInIframe() {
@@ -250,21 +252,20 @@ export default class extends Controller {
     }
   }
 
-  postMessageOrigins() {
+  postMessageOrigin() {
     if (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin)) {
-      return [this.activeHostOrigin]
+      return this.activeHostOrigin
     }
 
     const inferredOrigin = this.initialHostOrigin()
     if (inferredOrigin) {
       this.activeHostOrigin = inferredOrigin
-      return [inferredOrigin]
+      return inferredOrigin
     }
 
-    // During initial iframe handshake the parent origin might not be inferable
-    // (for example due to strict referrer policy). In that case, try allowlisted
-    // origins until the host answers and we can lock onto event.origin.
-    return this.embeddedInIframe() ? this.hostOriginsValue : []
+    // During the initial iframe handshake the parent origin might not be inferable
+    // (for example due to strict referrer policy), so use wildcard once until host replies.
+    return "*"
   }
 
   autonomousLabel(value) {

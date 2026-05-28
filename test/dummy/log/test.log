@@ -608,3 +608,132 @@ OmnyaConnector::HostContextFetcherTest: test_raises_error_for_invalid_URI
 ----------------------------------------------------------------------------------------
 OmnyaConnector::HostContextFetcherTest: test_raises_error_when_context_endpoint_is_blank
 ----------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_for_invalid_URI
+-------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_endpoint_origin_is_not_in_allowed_list
+-----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_context_endpoint_is_blank
+----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_token_is_blank
+-----------------------------------------------------------------------------
+-------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_module_key_in_production
+-------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_allow_trusted_origin_csrf_bypass_defaults_based_on_environment
+------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_test_fallback_origin_when_none_configured
+--------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_autonomous_values_are_nil_in_production
+-------------------------------------------------------------------------------
+------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_DSL_values_override_ENV_fallback
+------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_host_origins_to_be_explicitly_set_in_production
+------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_parses_comma_separated_origins
+----------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_development_default_origins_in_development
+---------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_sets_autonomous_defaults_in_development
+-------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_wildcard_origins_in_production
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_configure_session_store_defaults_to_true
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_http_origins_in_production
+--------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unauthorized_for_fetch_errors_with_unauthorized_message
+------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-expired", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+{event: "host_context.assign.before", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "module_context.create.fetch_error", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, fetch_error: "unauthorized"}
+{event: "host_context.clear.before", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.after", request_id: "70350c32-4c9f-41a4-8b15-acfebed6c32a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+Completed 401 Unauthorized in 2ms (Views: 0.1ms | GC: 0.0ms)
+------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_destroy_clears_host_context
+------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-2", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+{event: "host_context.assign.before", request_id: "dcd03395-a327-48f5-a038-68d20f258e0b", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "dcd03395-a327-48f5-a038-68d20f258e0b", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "dcd03395-a327-48f5-a038-68d20f258e0b", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.persisted", request_id: "dcd03395-a327-48f5-a038-68d20f258e0b", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-88", raw_host_context_tenant_id: 800, normalized_host_context_user_guid: "user-guid-88", normalized_host_context_tenant_id: 800, autonomous_user_guid: nil, autonomous_tenant_id: nil, persisted_user_guid: "user-guid-88", persisted_tenant_id: 800}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started DELETE "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#destroy as HTML
+{event: "host_context.assign.before", request_id: "3a8036e6-d206-4aaf-b5e4-cf59b85769d0", controller: "OmnyaConnector::ModuleContextsController", action: "destroy", path: "/module_context", cookie_header_present: true, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-88", raw_host_context_tenant_id: 800, normalized_host_context_user_guid: "user-guid-88", normalized_host_context_tenant_id: 800, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "3a8036e6-d206-4aaf-b5e4-cf59b85769d0", controller: "OmnyaConnector::ModuleContextsController", action: "destroy", path: "/module_context", cookie_header_present: true, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-88", raw_host_context_tenant_id: 800, normalized_host_context_user_guid: "user-guid-88", normalized_host_context_tenant_id: 800, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: "user-guid-88", resolved_tenant_id: 800}
+{event: "module_context.destroy.received", request_id: "3a8036e6-d206-4aaf-b5e4-cf59b85769d0", controller: "OmnyaConnector::ModuleContextsController", action: "destroy", path: "/module_context", cookie_header_present: true, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-88", raw_host_context_tenant_id: 800, normalized_host_context_user_guid: "user-guid-88", normalized_host_context_tenant_id: 800, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.before", request_id: "3a8036e6-d206-4aaf-b5e4-cf59b85769d0", controller: "OmnyaConnector::ModuleContextsController", action: "destroy", path: "/module_context", cookie_header_present: true, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-88", raw_host_context_tenant_id: 800, normalized_host_context_user_guid: "user-guid-88", normalized_host_context_tenant_id: 800, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.after", request_id: "3a8036e6-d206-4aaf-b5e4-cf59b85769d0", controller: "OmnyaConnector::ModuleContextsController", action: "destroy", path: "/module_context", cookie_header_present: true, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+Completed 204 No Content in 1ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_context_with_missing_user_guid
+-----------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+{event: "host_context.assign.before", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "module_context.create.invalid_context", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, fetched_user_guid: nil, fetched_tenant_id: 700}
+{event: "host_context.clear.before", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.after", request_id: "7ae7a77d-9aa6-4c36-8536-c330688cc3d8", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+-------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_creates_context_from_valid_payload
+-------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+{event: "host_context.assign.before", request_id: "b030459d-776b-4bf6-b3ea-b6c8e646ca2a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "b030459d-776b-4bf6-b3ea-b6c8e646ca2a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "b030459d-776b-4bf6-b3ea-b6c8e646ca2a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.persisted", request_id: "b030459d-776b-4bf6-b3ea-b6c8e646ca2a", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["host_context_tenant_id", "host_context_user_guid", "session_id"], raw_host_context_user_guid: "user-guid-77", raw_host_context_tenant_id: 700, normalized_host_context_user_guid: "user-guid-77", normalized_host_context_tenant_id: 700, autonomous_user_guid: nil, autonomous_tenant_id: nil, persisted_user_guid: "user-guid-77", persisted_tenant_id: 700}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_invalid_module_key
+-----------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => "wrong-key"}}
+{event: "host_context.assign.before", request_id: "e4dfa6c2-4233-445a-8aed-57830ac3d51d", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "e4dfa6c2-4233-445a-8aed-57830ac3d51d", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "e4dfa6c2-4233-445a-8aed-57830ac3d51d", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.before", request_id: "e4dfa6c2-4233-445a-8aed-57830ac3d51d", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.after", request_id: "e4dfa6c2-4233-445a-8aed-57830ac3d51d", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unprocessable_entity_for_other_fetch_errors
+------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-28 11:07:26 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+{event: "host_context.assign.before", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.assign.after", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, resolved_user_guid: nil, resolved_tenant_id: nil}
+{event: "module_context.create.received", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "module_context.create.fetch_error", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil, fetch_error: "context_request_failed"}
+{event: "host_context.clear.before", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+{event: "host_context.clear.after", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
+Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | GC: 0.0ms)
