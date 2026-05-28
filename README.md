@@ -9,6 +9,7 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 - **CSRF-safe iframe embedding** — `SameSite=None` session cookies, optional CSRF bypass for trusted host origins
 - **Content Security Policy** — Automatically appends host origins to `connect-src`
 - **Stimulus controller** — Handles the full postMessage lifecycle: handshake, context fetch, token refresh on 401, periodic refresh, and host theme synchronisation
+- **Browser URL sync** — Reports module route changes to the host (`external-module:navigate`) so bookmarks and browser back/forward work
 - **Dark-mode / theme sync** — Applies the host's light/dark/system preference to the module page via `data-host-theme-preference` and the `dark` CSS class
 - **Ruby DSL configuration** — `OmnyaConnector.configure` block with ENV variable fallback
 - **Production validation** — Enforces HTTPS-only origins, no wildcards, explicit origin list, module key presence
@@ -61,6 +62,27 @@ A module is intended to be embedded in a trusted host application iframe.
 - Production removes the legacy `X-Frame-Options` response header.
 - Embedding is restricted with CSP `frame-ancestors` to trusted origins.
 - CSP uses per-request nonces for `script-src` so Rails/importmap inline scripts work without `unsafe-inline`.
+
+### CSP and Inline Styles
+
+If the browser reports:
+
+`Refused to apply a stylesheet because its hash, its nonce, or 'unsafe-inline' does not appear in the style-src directive of the Content Security Policy.`
+
+the page likely contains inline styling (for example `style="..."`, `<style>...</style>`, or helper options like `style:` in ERB).
+
+This app intentionally keeps a strict CSP for styles (`style-src :self :https`), so inline styles are blocked by design.
+
+Use this fix pattern:
+
+- Move inline styles to classes in `app/assets/stylesheets/application.css`.
+- Replace inline attributes in views with `class:`.
+
+Quick check for inline styles in app views:
+
+```sh
+rg -n "style=|<style" app/views
+```
 
 ### X-Frame-options
 Do not set an `X-Frame-Options` header on module pages. Values like `DENY` or `SAMEORIGIN` will cause browsers to block the page from loading inside the Omnya host iframe. Use `Content-Security-Policy: frame-ancestors` to control which host origins are allowed to embed the module.
@@ -129,8 +151,44 @@ The controller dispatches these custom events on its element:
 | `module:context-updated` | `{ context }` | Context fetched and persisted |
 | `module:context-unavailable` | `{ message }` | Context fetch or persistence failed |
 | `module:theme-updated` | `{ preference, effectiveMode }` | Host theme applied to the page |
+| `module:navigate` | `{ modulePath }` | Host requested in-module navigation (optional client-side routing hook) |
 
 Optional status panel targets: `connectionStatus`, `contextStatus`, `userLogin`, `tenantName`, `errorStatus`.
+
+### Browser navigation and bookmarks
+
+The controller automatically reports internal module URL changes to the host application using:
+
+```json
+{
+  "type": "external-module:navigate",
+  "moduleKey": "my-module",
+  "modulePath": "/orders/42?tab=history"
+}
+```
+
+This enables:
+
+- host address bar updates with `module_path`
+- bookmarkable deep links
+- browser Back/Forward restoration
+
+Automatic reporting is triggered on:
+
+- initial host connection
+- `turbo:load`
+- `popstate`
+- `hashchange`
+
+For client-side routing, listen for host-initiated navigation:
+
+```javascript
+document.querySelector('[data-controller="omnya-connector"]')
+  .addEventListener("module:navigate", (event) => {
+    const { modulePath } = event.detail
+    // router.replace(modulePath)
+  })
+```
 
 ### Host theme integration
 

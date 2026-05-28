@@ -41,8 +41,14 @@ export default class extends Controller {
     this.boundContextUpdated = this.handleContextUpdatedEvent.bind(this)
     this.boundContextUnavailable = this.handleContextUnavailableEvent.bind(this)
     this.boundHostConnected = this.handleHostConnectedEvent.bind(this)
+    this.boundTurboLoad = this.handleTurboLoad.bind(this)
+    this.boundPopstate = this.handlePopstate.bind(this)
+    this.boundHashChange = this.handleHashChange.bind(this)
 
     window.addEventListener("message", this.boundMessageHandler)
+    document.addEventListener("turbo:load", this.boundTurboLoad)
+    window.addEventListener("popstate", this.boundPopstate)
+    window.addEventListener("hashchange", this.boundHashChange)
     this.element.addEventListener("module:context-updated", this.boundContextUpdated)
     this.element.addEventListener("module:context-unavailable", this.boundContextUnavailable)
     this.element.addEventListener("module:host-connected", this.boundHostConnected)
@@ -64,6 +70,9 @@ export default class extends Controller {
 
   disconnect() {
     window.removeEventListener("message", this.boundMessageHandler)
+    document.removeEventListener("turbo:load", this.boundTurboLoad)
+    window.removeEventListener("popstate", this.boundPopstate)
+    window.removeEventListener("hashchange", this.boundHashChange)
     this.element.removeEventListener("module:context-updated", this.boundContextUpdated)
     this.element.removeEventListener("module:context-unavailable", this.boundContextUnavailable)
     this.element.removeEventListener("module:host-connected", this.boundHostConnected)
@@ -93,6 +102,11 @@ export default class extends Controller {
 
     if (payload.type === "external-module:theme") {
       this.applyHostTheme(payload)
+      return
+    }
+
+    if (payload.type === "external-module:navigate") {
+      this.handleHostNavigate(payload)
       return
     }
 
@@ -199,14 +213,15 @@ export default class extends Controller {
     return this.hostOriginsValue.includes(origin)
   }
 
-  postToParent(type) {
+  postToParent(type, extra = {}) {
     if (!this.embeddedInIframe() || !this.hasModuleKeyValue || !this.moduleKeyValue) {
       return
     }
 
     const payload = {
       type,
-      moduleKey: this.moduleKeyValue
+      moduleKey: this.moduleKeyValue,
+      ...extra
     }
 
     this.postMessageOrigins().forEach((origin) => {
@@ -317,6 +332,37 @@ export default class extends Controller {
 
   handleHostConnectedEvent() {
     this.connectionStatusTarget.textContent = "Connected to host"
+    this.reportCurrentNavigationToHost()
+  }
+
+  handleTurboLoad() {
+    this.reportCurrentNavigationToHost()
+  }
+
+  handlePopstate() {
+    this.reportCurrentNavigationToHost()
+  }
+
+  handleHashChange() {
+    this.reportCurrentNavigationToHost()
+  }
+
+  reportCurrentNavigationToHost() {
+    const modulePath = this.currentModulePath()
+    if (!modulePath.startsWith("/")) return
+
+    this.postToParent("external-module:navigate", { modulePath })
+  }
+
+  currentModulePath() {
+    return `${window.location.pathname}${window.location.search}${window.location.hash}`
+  }
+
+  handleHostNavigate(payload) {
+    const modulePath = String(payload.modulePath || "").trim()
+    if (!modulePath.startsWith("/")) return
+
+    this.dispatchEvent("module:navigate", { modulePath })
   }
 
   handleContextUpdatedEvent(event) {
