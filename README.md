@@ -272,6 +272,81 @@ Required repository secret:
 
 - `GITHUB_PACKAGES_TOKEN` — GitHub token with `write:packages` permission
 
+
+## Step-by-Step Implementation
+
+To integrate the OmnyaConnector into your existing Rails application, follow these steps:
+
+### 1. Add the Gem to Your Application
+
+Add the following to your `Gemfile`:
+
+```ruby
+source "https://rubygems.pkg.github.com/datacollectors-net" do
+  gem "omnya_connector"
+end
+```
+
+Run the following commands to install the gem and generate the necessary files:
+
+```bash
+bundle install
+rails generate omnya_connector:install
+```
+
+### 2. Mount the Engine
+
+Ensure the engine is mounted in your `config/routes.rb` file. By default, the generator mounts it at `/`:
+
+```ruby
+mount OmnyaConnector::Engine, at: "/"
+```
+
+### 3. Include the Controller Concern
+
+Add the following line to your `ApplicationController` to include the OmnyaConnector functionality:
+
+```ruby
+include OmnyaConnector::ControllerConcern
+```
+
+### 4. Configure the Connector
+
+Edit the generated initializer file at `config/initializers/omnya_connector.rb` to configure the connector. Use the provided DSL to set up your environment-specific settings. For example:
+
+```ruby
+OmnyaConnector.configure do |config|
+  config.module_key = ENV["MODULE_KEY"]
+  config.host_origins = ["https://example.com"]
+end
+```
+
+### 5. Verify Content Security Policy (CSP)
+
+Ensure your application’s Content Security Policy allows connections to the host origins. The connector automatically appends host origins to `connect-src`.
+
+### 6. Test the Integration
+
+Run your Rails server and verify the following:
+- The iframe embedding works as expected.
+- The host application can communicate with the module via `postMessage`.
+- Authentication context is correctly managed.
+
+### 7. Optional: Customize Styles and Scripts
+
+You can customize the module’s appearance and behavior by editing the files in the `app/assets` directory:
+- Styles: `app/assets/stylesheets/omnya_connector/application.css`
+- JavaScript: `app/assets/javascripts/omnya_connector/controllers/omnya_connector_controller.js`
+
+### 8. Deploy to Production
+
+Before deploying, ensure the following:
+- `config.host_origins` is set to a secure, HTTPS-only list of origins.
+- All environment variables are correctly configured.
+- The application is tested in a production-like environment.
+
+With these steps completed, your application should be fully integrated with the OmnyaConnector.
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
