@@ -7,7 +7,7 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 - **Host context management** — Receives token and context endpoint from the host via `postMessage`, fetches user/tenant context, persists it in the Rails session
 - **Autonomous mode** — Operates standalone in development with configurable `user_guid` and `tenant_id`
 - **CSRF-safe iframe embedding** — `SameSite=None` session cookies, optional CSRF bypass for trusted host origins
-- **Content Security Policy** — Automatically appends host origins to `connect-src`
+- **Content Security Policy** — Automatically merges host origins into `connect-src` and `frame-ancestors` (additive, non-destructive)
 - **Stimulus controller** — Handles the full postMessage lifecycle: handshake, context fetch, token refresh on 401, periodic refresh, and host theme synchronisation
 - **Browser URL sync** — Reports module route changes to the host (`external-module:navigate`) so bookmarks and browser back/forward work
 - **Dark-mode / theme sync** — Applies the host's light/dark/system preference to the module page via `data-host-theme-preference` and the `dark` CSS class
@@ -64,6 +64,18 @@ A module is intended to be embedded in a trusted host application iframe.
 - Production removes the legacy `X-Frame-Options` response header.
 - Embedding is restricted with CSP `frame-ancestors` to trusted origins.
 - CSP uses per-request nonces for `script-src` so Rails/importmap inline scripts work without `unsafe-inline`.
+
+The engine applies CSP origin merges in `omnya_connector.content_security_policy` during `app.config.after_initialize` using the resolved `host_app_origins` from `OmnyaConnector.configure` / `HOST_APP_ORIGINS`.
+
+Merge behavior is additive (it does not overwrite existing app directives):
+
+- `connect-src` keeps existing values and appends `host_app_origins`
+- `frame-ancestors` keeps existing values and appends `:self` plus `host_app_origins`
+- final source lists are de-duplicated
+
+This keeps CSP origin handling aligned with the same resolved origin list used by Stimulus host-origin validation and module context origin validation.
+
+For consuming apps: keep static CSP directives and nonce setup in your app initializer, but avoid dynamic `host_app_origins` lookups / dynamic `frame-ancestors` mutation there; let the gem handle those dynamic origin appends.
 
 ### CSP and Inline Styles
 

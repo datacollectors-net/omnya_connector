@@ -38,15 +38,7 @@ module OmnyaConnector
     # so the Stimulus controller can fetch context from the host.
     initializer "omnya_connector.content_security_policy" do |app|
       app.config.after_initialize do
-        host_origins = app.config.x.omnya_connector&.host_app_origins
-        next if host_origins.blank?
-
-        if app.config.respond_to?(:content_security_policy) && app.config.content_security_policy
-          app.config.content_security_policy.connect_src(
-            *app.config.content_security_policy.connect_src,
-            *host_origins
-          )
-        end
+        Engine.send(:apply_content_security_policy!, app)
       end
     end
 
@@ -60,6 +52,32 @@ module OmnyaConnector
 
     initializer "omnya_connector.assets" do |app|
       app.config.assets.paths << Engine.root.join("app/assets/javascripts") if app.config.respond_to?(:assets)
+    end
+
+    class << self
+      private
+
+      def apply_content_security_policy!(app)
+        return unless app.config.respond_to?(:content_security_policy)
+
+        policy = app.config.content_security_policy
+        return if policy.nil?
+
+        host_origins = app.config.x.omnya_connector&.host_app_origins || []
+
+        policy.connect_src(*merge_sources(directive_values(policy, :connect_src), host_origins))
+        policy.frame_ancestors(*merge_sources(directive_values(policy, :frame_ancestors), [ :self ], host_origins))
+      end
+
+      def directive_values(policy, directive)
+        return [] unless policy.respond_to?(directive)
+
+        Array(policy.public_send(directive))
+      end
+
+      def merge_sources(*groups)
+        groups.flatten.compact.uniq
+      end
     end
   end
 end
