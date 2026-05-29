@@ -4,6 +4,7 @@ module OmnyaConnector
 
     included do
       before_action :assign_current_host_context
+      skip_forgery_protection if: :trusted_embedded_origin_request?
 
       helper_method :omnya_connector_module_key,
                     :omnya_connector_host_app_origins,
@@ -66,11 +67,31 @@ module OmnyaConnector
     def trusted_embedded_origin_request?
       return false unless Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass
 
-      origin = request.headers["Origin"].to_s
-      return false if origin.blank?
+      origin = effective_request_origin
+      return false if origin.nil?
       return false if origin == request.base_url
 
       omnya_connector_host_app_origins.include?(origin)
+    end
+
+    def effective_request_origin
+      raw = request.headers["Origin"].to_s
+      return referrer_origin if raw.blank? || raw == "null"
+
+      raw
+    end
+
+    def referrer_origin
+      return nil if request.referer.blank?
+
+      uri = URI.parse(request.referer)
+      return nil unless uri.scheme && uri.host
+
+      standard_port = (uri.scheme == "https" && uri.port == 443) ||
+                      (uri.scheme == "http" && uri.port == 80)
+      standard_port ? "#{uri.scheme}://#{uri.host}" : "#{uri.scheme}://#{uri.host}:#{uri.port}"
+    rescue URI::InvalidURIError
+      nil
     end
 
     def omnya_connector_module_key

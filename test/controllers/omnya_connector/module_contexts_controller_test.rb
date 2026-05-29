@@ -1,6 +1,8 @@
 require "test_helper"
 
 class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::IntegrationTest
+  include EmbeddedCsrfTestHelper
+
   test "creates context from valid payload" do
     context_payload = {
       "user" => { "guid" => "user-guid-77" },
@@ -102,6 +104,71 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
     delete omnya_connector.module_context_url
     assert_response :no_content
+  end
+
+  # ── trusted_embedded_origin_request? – Referer fallback ───────────────────
+
+  test "trusted_embedded_origin_request? is true when Origin blank but Referer is trusted" do
+    with_embedded_csrf_enforcement do
+      with_stubbed_host_context({ "user" => { "guid" => "u1" }, "tenant" => { "id" => 1 } }) do
+        post omnya_connector.module_context_url,
+          params: {
+            module_context: {
+              token: "t",
+              context_endpoint: "https://host.example.test/external_modules/context",
+              module_key: Rails.application.config.x.omnya_connector.module_key
+            }
+          },
+          headers: { "Referer" => "https://host.example.test/page" }
+        assert_response :no_content
+      end
+    end
+  end
+
+  test "trusted_embedded_origin_request? is true when Origin is 'null' but Referer is trusted" do
+    with_embedded_csrf_enforcement do
+      with_stubbed_host_context({ "user" => { "guid" => "u2" }, "tenant" => { "id" => 2 } }) do
+        post omnya_connector.module_context_url,
+          params: {
+            module_context: {
+              token: "t",
+              context_endpoint: "https://host.example.test/external_modules/context",
+              module_key: Rails.application.config.x.omnya_connector.module_key
+            }
+          },
+          headers: { "Origin" => "null", "Referer" => "https://host.example.test/page" }
+        assert_response :no_content
+      end
+    end
+  end
+
+  test "trusted_embedded_origin_request? is false when Origin blank and Referer is untrusted" do
+    with_embedded_csrf_enforcement do
+      post omnya_connector.module_context_url,
+        params: {
+          module_context: {
+            token: "t",
+            context_endpoint: "https://host.example.test/external_modules/context",
+            module_key: Rails.application.config.x.omnya_connector.module_key
+          }
+        },
+        headers: { "Referer" => "https://evil.example.com/page" }
+      assert_response :unprocessable_content
+    end
+  end
+
+  test "trusted_embedded_origin_request? is false when Origin blank and Referer absent" do
+    with_embedded_csrf_enforcement do
+      post omnya_connector.module_context_url,
+        params: {
+          module_context: {
+            token: "t",
+            context_endpoint: "https://host.example.test/external_modules/context",
+            module_key: Rails.application.config.x.omnya_connector.module_key
+          }
+        }
+      assert_response :unprocessable_content
+    end
   end
 
   private

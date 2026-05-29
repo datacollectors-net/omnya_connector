@@ -1,8 +1,5 @@
 module OmnyaConnector
   class ModuleContextsController < ApplicationController
-    # Allow trusted host-embedded calls when third-party cookies interfere with CSRF checks.
-    skip_forgery_protection only: %i[create], if: :trusted_embedded_origin_request?
-
     def create
       payload = params.expect(module_context: [ :token, :context_endpoint, :module_key ])
       log_host_context_state(event: "module_context.create.received")
