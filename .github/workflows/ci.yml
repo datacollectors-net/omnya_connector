@@ -20,6 +20,7 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
+          cache-version: ${{ hashFiles('*.gemspec', 'lib/omnya_connector/version.rb') }}
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v5
@@ -47,6 +48,7 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
+          cache-version: ${{ hashFiles('*.gemspec', 'lib/omnya_connector/version.rb') }}
 
       - name: Run test suite
         run: bundle exec rake test
@@ -64,7 +66,7 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
+          cache-version: ${{ hashFiles('*.gemspec', 'lib/omnya_connector/version.rb') }}
 
       - name: Build gem package
         run: bundle exec rake build
-
