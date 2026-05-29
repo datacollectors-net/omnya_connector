@@ -1,5 +1,12 @@
 module OmnyaConnector
   class ModuleContextsController < ApplicationController
+    # Context sync and teardown actions carry their own application-level security
+    # (module_key validation + context_endpoint origin check against host_app_origins),
+    # so CSRF verification adds no meaningful protection here. Skipping it unconditionally
+    # avoids 422 failures when third-party cookies are restricted and the session cookie
+    # cannot be round-tripped with the CSRF token.
+    skip_forgery_protection
+
     def create
       payload = params.expect(module_context: [ :token, :context_endpoint, :module_key ])
       log_host_context_state(event: "module_context.create.received")

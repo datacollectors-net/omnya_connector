@@ -6,7 +6,7 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 
 - **Host context management** — Receives token and context endpoint from the host via `postMessage`, fetches user/tenant context, persists it in the Rails session
 - **Autonomous mode** — Operates standalone in development with configurable `user_guid` and `tenant_id`
-- **CSRF-safe iframe embedding** — `SameSite=None` session cookies, optional CSRF bypass for trusted host origins
+- **CSRF-safe iframe embedding** — `SameSite=None` session cookies; `POST /module_context` unconditionally skips CSRF (protected by module-key + context-endpoint origin validation instead); Turbo/fetch write requests from within the module iframe are trusted when the Stimulus controller injects `X-Omnya-Embedded-Host-Origin` with a postMessage-established trusted host origin (guarded by `allow_trusted_origin_csrf_bypass`)
 - **Content Security Policy** — Automatically merges host origins into `connect-src` and `frame-ancestors` (additive, non-destructive)
 - **Stimulus controller** — Handles the full postMessage lifecycle: handshake, context fetch, token refresh on 401, periodic refresh, and host theme synchronisation
 - **Browser URL sync** — Reports module route changes to the host (`external-module:navigate`) so bookmarks and browser back/forward work
@@ -98,6 +98,28 @@ Quick check for inline styles in app views:
 rg -n "style=|<style" app/views
 ```
 
+### Embedded CSRF handling
+
+Third-party cookie restrictions in modern browsers mean that the session cookie may not be sent with requests from a module page embedded in a host iframe. When this happens the CSRF token in the module page's `<meta name="csrf-token">` tag does not match the server's expected token for the new (cookie-less) session, causing 422 responses on write actions.
+
+The connector handles this with two complementary mechanisms:
+
+**1. `POST /module_context` — unconditional `skip_forgery_protection`**
+
+The context-sync endpoint has its own application-level security (module-key validation and context-endpoint origin checked against `host_app_origins`), so CSRF provides no additional protection. Skipping it avoids 422 failures during the periodic host context refresh when cookies are restricted.
+
+**2. `X-Omnya-Embedded-Host-Origin` header bypass for Turbo write requests**
+
+After the postMessage handshake succeeds, the Stimulus controller knows the trusted host origin (`activeHostOrigin`). It injects `X-Omnya-Embedded-Host-Origin: <origin>` on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event). The server's `trusted_embedded_origin_request?` check validates this header against `host_app_origins` and skips CSRF when it matches.
+
+This mechanism is only active when:
+- `allow_trusted_origin_csrf_bypass` is `true`
+- The raw `Origin` header is blank, `"null"`, or equals the module's own base URL (i.e. the normal Origin-based trust check is not applicable)
+- The header value is present in `host_app_origins`
+- The postMessage handshake has already completed (the Stimulus controller only sets `activeHostOrigin` after receiving the first host context message)
+
+Requests before the handshake completes, or from untrusted origins, are not affected by this mechanism and continue to be subject to normal CSRF enforcement.
+
 ### X-Frame-options
 Do not set an `X-Frame-Options` header on module pages. Values like `DENY` or `SAMEORIGIN` will cause browsers to block the page from loading inside the Omnya host iframe. Use `Content-Security-Policy: frame-ancestors` to control which host origins are allowed to embed the module.
 
@@ -132,7 +154,7 @@ The `OmnyaConnector::ControllerConcern` provides these methods (also available a
 | `omnya_connector_autonomous_user_guid` | Autonomous mode user GUID |
 | `omnya_connector_autonomous_tenant_id` | Autonomous mode tenant ID |
 | `require_host_context!` | Before-action guard: redirects/returns 401 if context missing |
-| `trusted_embedded_origin_request?` | Check if request comes from a trusted host origin |
+| `trusted_embedded_origin_request?` | Returns `true` for cross-origin requests whose `Origin` header is a configured trusted host origin, **or** for same-origin/no-origin requests that carry an `X-Omnya-Embedded-Host-Origin` header with a trusted host origin (set by the Stimulus controller after the postMessage handshake). Always `false` when `allow_trusted_origin_csrf_bypass` is disabled. |
 
 ### CurrentAttributes
 
@@ -168,6 +190,10 @@ The controller dispatches these custom events on its element:
 | `module:navigate` | `{ modulePath }` | Host requested in-module navigation (optional client-side routing hook) |
 
 Optional status panel targets: `connectionStatus`, `contextStatus`, `userLogin`, `tenantName`, `errorStatus`.
+
+#### Embedded host origin header
+
+Once the postMessage handshake with the host completes and `activeHostOrigin` is established, the controller automatically injects an `X-Omnya-Embedded-Host-Origin` header on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event) and on the `POST /module_context` call. This header carries the trusted host origin and is used by `trusted_embedded_origin_request?` on the server to bypass CSRF verification for embedded write actions when third-party cookie restrictions make normal CSRF token matching impossible. The header is only injected when the origin is in `host_app_origins`, so it is never sent for untrusted origins.
 
 ### Browser navigation and bookmarks
 

@@ -93,6 +93,62 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
     Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = original_bypass
   end
 
+  # ── X-Omnya-Embedded-Host-Origin header bypass (Check 2) ───────────────────
+  #
+  # When the module's Stimulus controller is embedded in a trusted host, it injects
+  # X-Omnya-Embedded-Host-Origin with the postMessage-established host origin on every
+  # Turbo/fetch request. The module's own requests carry Origin == module base URL
+  # (non-actionable for cross-origin trust), so the server falls back to this header.
+
+  MODULE_BASE_URL = "http://www.example.com"
+
+  test "DELETE with trusted X-Omnya-Embedded-Host-Origin and module-origin Origin succeeds" do
+    with_embedded_csrf_enforcement do
+      delete widget_url(1), headers: {
+        "Origin" => MODULE_BASE_URL,
+        "X-Omnya-Embedded-Host-Origin" => TRUSTED_ORIGIN
+      }
+      assert_response :no_content
+    end
+  end
+
+  test "POST with trusted X-Omnya-Embedded-Host-Origin and module-origin Origin succeeds" do
+    with_embedded_csrf_enforcement do
+      post widgets_url, headers: {
+        "Origin" => MODULE_BASE_URL,
+        "X-Omnya-Embedded-Host-Origin" => TRUSTED_ORIGIN
+      }
+      assert_response :no_content
+    end
+  end
+
+  test "DELETE with untrusted X-Omnya-Embedded-Host-Origin is rejected with 422" do
+    with_embedded_csrf_enforcement do
+      delete widget_url(1), headers: {
+        "Origin" => MODULE_BASE_URL,
+        "X-Omnya-Embedded-Host-Origin" => UNTRUSTED_ORIGIN
+      }
+      assert_response :unprocessable_content
+    end
+  end
+
+  test "DELETE with trusted X-Omnya-Embedded-Host-Origin is rejected when bypass flag is disabled" do
+    original_forgery = ActionController::Base.allow_forgery_protection
+    original_bypass  = Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass
+
+    ActionController::Base.allow_forgery_protection = true
+    Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = false
+
+    delete widget_url(1), headers: {
+      "Origin" => MODULE_BASE_URL,
+      "X-Omnya-Embedded-Host-Origin" => TRUSTED_ORIGIN
+    }
+    assert_response :unprocessable_content
+  ensure
+    ActionController::Base.allow_forgery_protection = original_forgery
+    Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = original_bypass
+  end
+
   private
 
   def widget_url(id)

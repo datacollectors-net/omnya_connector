@@ -67,11 +67,25 @@ module OmnyaConnector
     def trusted_embedded_origin_request?
       return false unless Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass
 
+      # Check 1: Cross-origin request where the Origin header names a trusted host.
+      # This covers the canonical embedded case where the host domain differs from the module domain.
       origin = effective_request_origin
-      return false if origin.nil?
-      return false if origin == request.base_url
+      return true if origin.present? && origin != request.base_url && omnya_connector_host_app_origins.include?(origin)
 
-      omnya_connector_host_app_origins.include?(origin)
+      # Check 2: Turbo/fetch requests issued from within the module iframe itself carry
+      # Origin == module base_url (same origin), Origin "null" (sandboxed iframe), or no Origin
+      # at all — none of which identify the embedding host. In these cases the Stimulus
+      # controller injects X-Omnya-Embedded-Host-Origin with the host origin it established
+      # during the postMessage handshake. Validate that header against the trusted allowlist.
+      # The header can only be set by JavaScript running in the module's own origin, so this
+      # is equivalent in trust level to a same-origin request from a known embedding context.
+      raw_origin = request.headers["Origin"].to_s
+      return false unless raw_origin.blank? || raw_origin == "null" || raw_origin == request.base_url
+
+      embedded_host = request.headers["X-Omnya-Embedded-Host-Origin"].to_s.strip.presence
+      return false if embedded_host.blank?
+
+      omnya_connector_host_app_origins.include?(embedded_host)
     end
 
     def effective_request_origin

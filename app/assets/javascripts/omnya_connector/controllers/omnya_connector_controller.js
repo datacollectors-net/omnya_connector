@@ -44,9 +44,11 @@ export default class extends Controller {
     this.boundTurboLoad = this.handleTurboLoad.bind(this)
     this.boundPopstate = this.handlePopstate.bind(this)
     this.boundHashChange = this.handleHashChange.bind(this)
+    this.boundBeforeFetchRequest = this.handleBeforeFetchRequest.bind(this)
 
     window.addEventListener("message", this.boundMessageHandler)
     document.addEventListener("turbo:load", this.boundTurboLoad)
+    document.addEventListener("turbo:before-fetch-request", this.boundBeforeFetchRequest)
     window.addEventListener("popstate", this.boundPopstate)
     window.addEventListener("hashchange", this.boundHashChange)
     this.element.addEventListener("module:context-updated", this.boundContextUpdated)
@@ -71,6 +73,7 @@ export default class extends Controller {
   disconnect() {
     window.removeEventListener("message", this.boundMessageHandler)
     document.removeEventListener("turbo:load", this.boundTurboLoad)
+    document.removeEventListener("turbo:before-fetch-request", this.boundBeforeFetchRequest)
     window.removeEventListener("popstate", this.boundPopstate)
     window.removeEventListener("hashchange", this.boundHashChange)
     this.element.removeEventListener("module:context-updated", this.boundContextUpdated)
@@ -199,6 +202,15 @@ export default class extends Controller {
     })
   }
 
+  // Injects X-Omnya-Embedded-Host-Origin into every Turbo-driven fetch request when
+  // the active host origin is known and trusted. The server uses this header to bypass
+  // CSRF verification for embedded write actions (DELETE/POST/PATCH) when the module's
+  // own Origin header is non-actionable (e.g. same-origin or absent due to cookie restrictions).
+  handleBeforeFetchRequest(event) {
+    if (!this.activeHostOrigin || !this.originAllowed(this.activeHostOrigin)) return
+    event.detail.fetchOptions.headers["X-Omnya-Embedded-Host-Origin"] = this.activeHostOrigin
+  }
+
   startRefreshTimer() {
     this.refreshTimer = setInterval(() => {
       if (!this.hostConnected) {
@@ -278,12 +290,17 @@ export default class extends Controller {
 
   async persistContextSession() {
     try {
+      const embeddedHostHeaders = (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin))
+        ? { "X-Omnya-Embedded-Host-Origin": this.activeHostOrigin }
+        : {}
+
       const response = await fetch(MODULE_CONTEXT_PATH, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "X-CSRF-Token": this.csrfToken()
+          "X-CSRF-Token": this.csrfToken(),
+          ...embeddedHostHeaders
         },
         credentials: "same-origin",
         body: JSON.stringify({

@@ -106,11 +106,19 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :no_content
   end
 
-  # ── trusted_embedded_origin_request? – Referer fallback ───────────────────
+  # ── ModuleContextsController CSRF bypass (skip_forgery_protection) ─────────
+  #
+  # ModuleContextsController unconditionally skips CSRF. These tests verify the
+  # 0.5.0 regression: POST /module_context must not 422 when Origin is the module's
+  # own base URL (same-origin iframe request) or absent — scenarios where third-party
+  # cookie restrictions cause the CSRF token to be unverifiable.
 
-  test "trusted_embedded_origin_request? is true when Origin blank but Referer is trusted" do
+  test "POST /module_context succeeds without CSRF token when Origin is module base URL" do
+    # Regression test for 0.5.0: Origin == module base_url caused trusted_embedded_origin_request?
+    # to return false, so CSRF was enforced. With skip_forgery_protection the endpoint no longer
+    # depends on CSRF at all. http://www.example.com is the base_url Rails uses in integration tests.
     with_embedded_csrf_enforcement do
-      with_stubbed_host_context({ "user" => { "guid" => "u1" }, "tenant" => { "id" => 1 } }) do
+      with_stubbed_host_context({ "user" => { "guid" => "u-reg-1" }, "tenant" => { "id" => 10 } }) do
         post omnya_connector.module_context_url,
           params: {
             module_context: {
@@ -119,15 +127,15 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
               module_key: Rails.application.config.x.omnya_connector.module_key
             }
           },
-          headers: { "Referer" => "https://host.example.test/page" }
+          headers: { "Origin" => "http://www.example.com" }
         assert_response :no_content
       end
     end
   end
 
-  test "trusted_embedded_origin_request? is true when Origin is 'null' but Referer is trusted" do
+  test "POST /module_context succeeds without CSRF token and no origin signals" do
     with_embedded_csrf_enforcement do
-      with_stubbed_host_context({ "user" => { "guid" => "u2" }, "tenant" => { "id" => 2 } }) do
+      with_stubbed_host_context({ "user" => { "guid" => "u-reg-2" }, "tenant" => { "id" => 20 } }) do
         post omnya_connector.module_context_url,
           params: {
             module_context: {
@@ -135,39 +143,9 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
               context_endpoint: "https://host.example.test/external_modules/context",
               module_key: Rails.application.config.x.omnya_connector.module_key
             }
-          },
-          headers: { "Origin" => "null", "Referer" => "https://host.example.test/page" }
+          }
         assert_response :no_content
       end
-    end
-  end
-
-  test "trusted_embedded_origin_request? is false when Origin blank and Referer is untrusted" do
-    with_embedded_csrf_enforcement do
-      post omnya_connector.module_context_url,
-        params: {
-          module_context: {
-            token: "t",
-            context_endpoint: "https://host.example.test/external_modules/context",
-            module_key: Rails.application.config.x.omnya_connector.module_key
-          }
-        },
-        headers: { "Referer" => "https://evil.example.com/page" }
-      assert_response :unprocessable_content
-    end
-  end
-
-  test "trusted_embedded_origin_request? is false when Origin blank and Referer absent" do
-    with_embedded_csrf_enforcement do
-      post omnya_connector.module_context_url,
-        params: {
-          module_context: {
-            token: "t",
-            context_endpoint: "https://host.example.test/external_modules/context",
-            module_key: Rails.application.config.x.omnya_connector.module_key
-          }
-        }
-      assert_response :unprocessable_content
     end
   end
 
