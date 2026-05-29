@@ -121,6 +121,8 @@ module OmnyaConnector
     end
 
     def log_host_context_state(event:, details: {})
+      return unless omnya_connector_log_host_context_state?
+
       raw_user_guid = session[:host_context_user_guid]
       raw_tenant_id = session[:host_context_tenant_id]
 
@@ -142,6 +144,10 @@ module OmnyaConnector
           autonomous_tenant_id: omnya_connector_autonomous_tenant_id
         }.merge(details)
       )
+    end
+
+    def omnya_connector_log_host_context_state?
+      Rails.application.config.x.omnya_connector.log_host_context_state
     end
   end
 end

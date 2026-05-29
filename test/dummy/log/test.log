@@ -737,3 +737,90 @@ Processing by OmnyaConnector::ModuleContextsController#create as HTML
 {event: "host_context.clear.before", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: false, session_keys: [], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
 {event: "host_context.clear.after", request_id: "ea69d1af-c8f5-4e8b-9e5a-5d90198aac46", controller: "OmnyaConnector::ModuleContextsController", action: "create", path: "/module_context", cookie_header_present: false, session_id_present: true, session_keys: ["session_id"], raw_host_context_user_guid: nil, raw_host_context_tenant_id: nil, normalized_host_context_user_guid: nil, normalized_host_context_tenant_id: nil, autonomous_user_guid: nil, autonomous_tenant_id: nil}
 Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_host_origins_to_be_explicitly_set_in_production
+------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_autonomous_values_are_nil_in_production
+-------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_wildcard_origins_in_production
+------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_development_default_origins_in_development
+---------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_test_fallback_origin_when_none_configured
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_log_host_context_state_defaults_to_false
+--------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_sets_autonomous_defaults_in_development
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_log_host_context_state_can_be_enabled_via_DSL
+-------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_configure_session_store_defaults_to_true
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_http_origins_in_production
+--------------------------------------------------------------------------
+----------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_parses_comma_separated_origins
+----------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_allow_trusted_origin_csrf_bypass_defaults_based_on_environment
+------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_module_key_in_production
+-------------------------------------------------------------------------
+------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_DSL_values_override_ENV_fallback
+------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_context_with_missing_user_guid
+-----------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 401 Unauthorized in 3ms (Views: 0.1ms | GC: 0.0ms)
+-------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_creates_context_from_valid_payload
+-------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_invalid_module_key
+-----------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => "wrong-key"}}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unprocessable_entity_for_other_fetch_errors
+------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unauthorized_for_fetch_errors_with_unauthorized_message
+------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-expired", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_destroy_clears_host_context
+------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-2", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started DELETE "/module_context" for 127.0.0.1 at 2026-05-29 11:04:52 +0200
+Processing by OmnyaConnector::ModuleContextsController#destroy as HTML
+Completed 204 No Content in 1ms (GC: 0.0ms)

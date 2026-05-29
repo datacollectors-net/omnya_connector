@@ -26,4 +26,8 @@ OmnyaConnector.configure do |config|
 
   # Set to false to skip automatic session store configuration (SameSite=None for iframes).
   # config.configure_session_store = true
+
+  # Enable verbose host-context request/session debug logging.
+  # Defaults to false.
+  # config.log_host_context_state = true
 end

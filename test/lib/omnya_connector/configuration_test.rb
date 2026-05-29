@@ -157,4 +157,22 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     test_config = OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("test"))
     assert_equal false, test_config[:allow_trusted_origin_csrf_bypass]
   end
+
+  test "log_host_context_state defaults to false" do
+    config = OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("test"))
+
+    assert_equal false, config[:log_host_context_state]
+  end
+
+  test "log_host_context_state can be enabled via DSL" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    OmnyaConnector.configure do |c|
+      c.log_host_context_state = true
+    end
+
+    config = OmnyaConnector.configuration.build(env)
+
+    assert_equal true, config[:log_host_context_state]
+  end
 end

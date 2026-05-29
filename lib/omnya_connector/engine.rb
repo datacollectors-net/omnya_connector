@@ -13,6 +13,7 @@ module OmnyaConnector
       app.config.x.omnya_connector.autonomous_tenant_id             = config[:autonomous_tenant_id]
       app.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = config[:allow_trusted_origin_csrf_bypass]
       app.config.x.omnya_connector.configure_session_store          = config[:configure_session_store]
+      app.config.x.omnya_connector.log_host_context_state           = config[:log_host_context_state]
     end
 
     # Configure session store for cross-site iframe embedding.

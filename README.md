@@ -48,10 +48,12 @@ OmnyaConnector.configure do |config|
   config.autonomous_tenant_id = "1"                        # ENV: AUTONOMOUS_TENANT_ID
   config.allow_trusted_origin_csrf_bypass = false           # ENV: ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS
   config.configure_session_store = true                     # Set false to manage session store yourself
+  config.log_host_context_state = false                     # Optional debug logging, default false
 end
 ```
 
 All settings fall through to ENV variables when not set via the DSL.
+`log_host_context_state` is initializer-only and does not have an ENV fallback.
 
 
 ## Security Notes: 

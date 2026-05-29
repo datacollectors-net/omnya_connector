@@ -16,7 +16,8 @@ module OmnyaConnector
                   :autonomous_user_guid,
                   :autonomous_tenant_id,
                   :allow_trusted_origin_csrf_bypass,
-                  :configure_session_store
+                  :configure_session_store,
+                  :log_host_context_state
 
     def initialize
       @module_key = nil
@@ -26,6 +27,7 @@ module OmnyaConnector
       @autonomous_tenant_id = nil
       @allow_trusted_origin_csrf_bypass = nil
       @configure_session_store = true
+      @log_host_context_state = false
     end
 
     # Resolves all settings (DSL values with ENV fallback) and returns a
@@ -52,7 +54,8 @@ module OmnyaConnector
         autonomous_user_guid: parse_autonomous_guid(resolved_autonomous_guid, env, default: "dev-user-guid-1"),
         autonomous_tenant_id: parse_autonomous_id(resolved_autonomous_tid, env, default: 1),
         allow_trusted_origin_csrf_bypass: resolved_csrf_bypass,
-        configure_session_store: @configure_session_store
+        configure_session_store: @configure_session_store,
+        log_host_context_state: @log_host_context_state
       }
     end
 
