@@ -2305,3 +2305,432 @@ Started DELETE "/widgets/1" for 127.0.0.1 at 2026-05-29 18:23:43 +0200
 Processing by WidgetsController#destroy as HTML
   Parameters: {"id" => "1"}
 Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_embedded_requests_do_not_use_autonomous_fallback_values
+-------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 2ms (GC: 0.0ms)
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_but_trusted_Referer_succeeds_without_CSRF_token
+---------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 4ms (GC: 4.2ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_succeeds_without_CSRF_token
+------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_Origin_null_but_trusted_Referer_succeeds_without_CSRF_token
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_from_trusted_Origin_succeeds_without_CSRF_token
+----------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_or_Referer_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:85:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:84:in 'block in <class:EmbeddedWriteRequestsTest>'
+--------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+--------------------------------------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_untrusted_Origin_is_rejected_with_422
+-------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:67:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:66:in 'block in <class:EmbeddedWriteRequestsTest>'
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_X-Omnya-Embedded-Host-Origin_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:147:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:146:in 'block in <class:EmbeddedWriteRequestsTest>'
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+----------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_is_rejected_when_bypass_flag_is_disabled
+-----------------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:162:in 'block in <class:EmbeddedWriteRequestsTest>'
+-------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_is_rejected_when_bypass_flag_is_disabled
+-------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:30 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:109:in 'block in <class:EmbeddedWriteRequestsTest>'
+----------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_Referer_and_no_Origin_is_rejected_with_422
+----------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:31 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:76:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:75:in 'block in <class:EmbeddedWriteRequestsTest>'
+--------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_non-embedded_requests_can_still_use_autonomous_fallback_values
+--------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:31 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_from_trusted_Origin_succeeds_without_CSRF_token
+----------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 2ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_is_rejected_when_bypass_flag_is_disabled
+-------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:109:in 'block in <class:EmbeddedWriteRequestsTest>'
+--------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+--------------------------------------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_X-Omnya-Embedded-Host-Origin_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:147:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:146:in 'block in <class:EmbeddedWriteRequestsTest>'
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_Origin_null_but_trusted_Referer_succeeds_without_CSRF_token
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_embedded_requests_do_not_use_autonomous_fallback_values
+-------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_Referer_and_no_Origin_is_rejected_with_422
+----------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:76:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:75:in 'block in <class:EmbeddedWriteRequestsTest>'
+-----------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_is_rejected_when_bypass_flag_is_disabled
+-----------------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:162:in 'block in <class:EmbeddedWriteRequestsTest>'
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_or_Referer_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:85:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:84:in 'block in <class:EmbeddedWriteRequestsTest>'
+--------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_non-embedded_requests_can_still_use_autonomous_fallback_values
+--------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_succeeds_without_CSRF_token
+------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+----------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_untrusted_Origin_is_rejected_with_422
+-------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:44 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:67:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:66:in 'block in <class:EmbeddedWriteRequestsTest>'
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_but_trusted_Referer_succeeds_without_CSRF_token
+---------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:34:45 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_valid_session_returns_session-backed_host_context
+-------------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-06 00:37:05 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-embedded", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 3ms (GC: 0.2ms)
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:05 +0200
+-------------------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_missing_session_returns_unauthorized_and_does_not_use_autonomous_fallback
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:05 +0200
+-----------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_standalone_request_still_uses_autonomous_fallback_in_development-style_mode
+-----------------------------------------------------------------------------------------------------------------------------
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:05 +0200
+----------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_Referer_and_no_Origin_is_rejected_with_422
+----------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:76:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:75:in 'block in <class:EmbeddedWriteRequestsTest>'
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_but_trusted_Referer_succeeds_without_CSRF_token
+---------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_or_Referer_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:85:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:84:in 'block in <class:EmbeddedWriteRequestsTest>'
+-------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_is_rejected_when_bypass_flag_is_disabled
+-------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:109:in 'block in <class:EmbeddedWriteRequestsTest>'
+--------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+--------------------------------------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+----------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_X-Omnya-Embedded-Host-Origin_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:147:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:146:in 'block in <class:EmbeddedWriteRequestsTest>'
+----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_from_trusted_Origin_succeeds_without_CSRF_token
+----------------------------------------------------------------------------------------------------
+Started POST "/widgets" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#create as HTML
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_embedded_requests_do_not_use_autonomous_fallback_values
+-------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+--------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_non-embedded_requests_can_still_use_autonomous_fallback_values
+--------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_succeeds_without_CSRF_token
+------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_is_rejected_when_bypass_flag_is_disabled
+-----------------------------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:162:in 'block in <class:EmbeddedWriteRequestsTest>'
+-------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_untrusted_Origin_is_rejected_with_422
+-------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:07 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)):
+  
+test/controllers/omnya_connector/embedded_write_requests_test.rb:67:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+test/controllers/omnya_connector/embedded_write_requests_test.rb:66:in 'block in <class:EmbeddedWriteRequestsTest>'
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_Origin_null_but_trusted_Referer_succeeds_without_CSRF_token
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-06-06 00:37:08 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_missing_session_returns_unauthorized_and_does_not_use_autonomous_fallback
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:18 +0200
+Processing by HostContextProbesController#show as JSON
+Filter chain halted as :require_host_context! rendered or redirected
+Completed 401 Unauthorized in 3ms (Views: 0.1ms | GC: 0.0ms)
+-----------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_standalone_request_still_uses_autonomous_fallback_in_development-style_mode
+-----------------------------------------------------------------------------------------------------------------------------
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:18 +0200
+Processing by HostContextProbesController#show as JSON
+Completed 200 OK in 0ms (Views: 0.0ms | GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_valid_session_returns_session-backed_host_context
+-------------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-06 00:37:18 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-embedded", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:18 +0200
+Processing by HostContextProbesController#show as JSON
+Completed 200 OK in 1ms (Views: 0.0ms | GC: 0.1ms)

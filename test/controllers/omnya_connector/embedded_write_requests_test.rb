@@ -22,6 +22,26 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
     end
   end
 
+  test "embedded requests do not use autonomous fallback values" do
+    with_autonomous_values("autonomous-user", 456) do
+      with_embedded_csrf_enforcement do
+        delete widget_url(1), headers: { "Origin" => TRUSTED_ORIGIN }
+        assert_response :no_content
+        assert_nil response.headers["X-Omnya-Current-User-Guid"]
+        assert_nil response.headers["X-Omnya-Current-Tenant-Id"]
+      end
+    end
+  end
+
+  test "non-embedded requests can still use autonomous fallback values" do
+    with_autonomous_values("autonomous-user", 456) do
+      delete widget_url(1)
+      assert_response :no_content
+      assert_equal "autonomous-user", response.headers["X-Omnya-Current-User-Guid"]
+      assert_equal 456, response.headers["X-Omnya-Current-Tenant-Id"]
+    end
+  end
+
   # ── DELETE with no Origin but trusted Referer ───────────────────────────────
 
   test "DELETE with no Origin but trusted Referer succeeds without CSRF token" do
@@ -157,5 +177,18 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
 
   def widgets_url
     "/widgets"
+  end
+
+  def with_autonomous_values(user_guid, tenant_id)
+    original_user_guid = Rails.application.config.x.omnya_connector.autonomous_user_guid
+    original_tenant_id = Rails.application.config.x.omnya_connector.autonomous_tenant_id
+
+    Rails.application.config.x.omnya_connector.autonomous_user_guid = user_guid
+    Rails.application.config.x.omnya_connector.autonomous_tenant_id = tenant_id
+
+    yield
+  ensure
+    Rails.application.config.x.omnya_connector.autonomous_user_guid = original_user_guid
+    Rails.application.config.x.omnya_connector.autonomous_tenant_id = original_tenant_id
   end
 end

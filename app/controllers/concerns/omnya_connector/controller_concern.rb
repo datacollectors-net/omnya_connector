@@ -17,15 +17,23 @@ module OmnyaConnector
     private
 
     def current_host_user_guid
-      @current_host_user_guid ||= normalized_host_context_guid(session[:host_context_user_guid]) ||
-        omnya_connector_autonomous_user_guid ||
-        autonomous_default_guid
+      return @current_host_user_guid if defined?(@current_host_user_guid)
+
+      @current_host_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
+      return @current_host_user_guid if @current_host_user_guid.present?
+      return @current_host_user_guid = nil if embedded_request?
+
+      @current_host_user_guid ||= omnya_connector_autonomous_user_guid || autonomous_default_guid
     end
 
     def current_host_tenant_id
-      @current_host_tenant_id ||= normalized_host_context_id(session[:host_context_tenant_id]) ||
-        omnya_connector_autonomous_tenant_id ||
-        autonomous_default_id
+      return @current_host_tenant_id if defined?(@current_host_tenant_id)
+
+      @current_host_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
+      return @current_host_tenant_id if @current_host_tenant_id.present?
+      return @current_host_tenant_id = nil if embedded_request?
+
+      @current_host_tenant_id ||= omnya_connector_autonomous_tenant_id || autonomous_default_id
     end
 
     def assign_current_host_context
@@ -56,7 +64,13 @@ module OmnyaConnector
     end
 
     def require_host_context!
-      return if current_host_user_guid.present? && current_host_tenant_id.present?
+      if embedded_request?
+        session_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
+        session_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
+        return if session_user_guid.present? && session_tenant_id.present?
+      else
+        return if current_host_user_guid.present? && current_host_tenant_id.present?
+      end
 
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path, alert: "Host context not available." }
@@ -67,6 +81,10 @@ module OmnyaConnector
     def trusted_embedded_origin_request?
       return false unless Rails.application.config.x.omnya_connector.allow_trusted_origin_csrf_bypass
 
+      embedded_request?
+    end
+
+    def embedded_request?
       # Check 1: Cross-origin request where the Origin header names a trusted host.
       # This covers the canonical embedded case where the host domain differs from the module domain.
       origin = effective_request_origin
@@ -146,6 +164,9 @@ module OmnyaConnector
     def persist_host_context(user_guid, tenant_id)
       session[:host_context_user_guid] = user_guid
       session[:host_context_tenant_id] = tenant_id
+      @current_host_user_guid = nil
+      @current_host_tenant_id = nil
+
       log_host_context_state(
         event: "host_context.persisted",
         details: {
