@@ -24,7 +24,14 @@ module OmnyaConnector
 
       return render_invalid_context(user_guid, tenant_id) if user_guid.nil? || tenant_id.nil?
 
+      previous_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
+      previous_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
+
       persist_host_context(user_guid, tenant_id)
+
+      context_changed = previous_user_guid != user_guid || previous_tenant_id != tenant_id
+      response.set_header("X-Omnya-Context-Changed", context_changed ? "1" : "0")
+      response.set_header("X-Omnya-Context-Fingerprint", "#{user_guid}:#{tenant_id}")
 
       head :no_content
     rescue OmnyaConnector::HostContextFetcher::Error => e

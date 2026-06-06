@@ -205,6 +205,8 @@ After the first trusted host context message, the controller pins `activeHostOri
 
 After each successful context sync, the controller persists the host context server-side and compares a fingerprint of `user.guid` + `tenant.id` with the last synced value stored in `sessionStorage`.
 
+`POST /module_context` also returns `X-Omnya-Context-Changed` (`1`/`0`) and `X-Omnya-Context-Fingerprint` headers. The controller treats `X-Omnya-Context-Changed: 1` as authoritative and forces a reload immediately.
+
 - If the fingerprint changed (for example, the host tenant switched), the page is reloaded immediately so all server-rendered and cached data is refreshed under the new tenant context.
 - If the fingerprint is unchanged, no reload is triggered, which avoids reload loops during periodic refreshes.
 

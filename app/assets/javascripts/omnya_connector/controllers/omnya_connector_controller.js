@@ -172,7 +172,7 @@ export default class extends Controller {
 
       const context = await response.json()
       const persisted = await this.persistContextSession()
-      if (!persisted) {
+      if (!persisted.ok) {
         this.dispatchEvent("module:context-unavailable", {
           message: "Host context sync failed."
         })
@@ -181,7 +181,7 @@ export default class extends Controller {
 
       this.retryAfterUnauthorized = false
       this.dispatchEvent("module:context-updated", { context })
-      this.reloadAfterContextSyncIfNeeded(context)
+      this.reloadAfterContextSyncIfNeeded(context, persisted.contextChanged)
     } catch (_error) {
       this.dispatchEvent("module:context-unavailable", {
         message: "Host connection is unavailable."
@@ -335,10 +335,21 @@ export default class extends Controller {
         })
       })
 
-      return response.ok
+      return {
+        ok: response.ok,
+        contextChanged: response.ok && this.contextChangedFromResponse(response)
+      }
     } catch (_error) {
-      return false
+      return {
+        ok: false,
+        contextChanged: false
+      }
     }
+  }
+
+  contextChangedFromResponse(response) {
+    const value = String(response.headers.get("X-Omnya-Context-Changed") || "").trim().toLowerCase()
+    return value === "1" || value === "true"
   }
 
   dispatchEvent(name, detail) {
@@ -424,8 +435,18 @@ export default class extends Controller {
     return id ? `${label} [${id}]` : label
   }
 
-  reloadAfterContextSyncIfNeeded(context) {
+  reloadAfterContextSyncIfNeeded(context, contextChanged = false) {
     const nextFingerprint = this.contextFingerprint(context)
+    if (contextChanged) {
+      if (nextFingerprint) {
+        this.contextSyncFingerprint = nextFingerprint
+        this.writeContextSyncFingerprint(nextFingerprint)
+      }
+
+      window.location.reload()
+      return
+    }
+
     if (!nextFingerprint) {
       return
     }

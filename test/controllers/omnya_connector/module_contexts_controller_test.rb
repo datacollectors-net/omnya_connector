@@ -20,6 +20,7 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     end
 
     assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
   end
 
   test "rejects invalid module key" do
@@ -118,6 +119,7 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     end
 
     assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
 
     with_stubbed_host_context({ "user" => { "guid" => "switch-user" }, "tenant" => { "id" => 900 } }) do
       post omnya_connector.module_context_url, params: {
@@ -130,6 +132,7 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     end
 
     assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
 
     get "/host_context_probe",
       headers: {
@@ -140,6 +143,34 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :success
     assert_equal "switch-user", response.parsed_body["user_guid"]
     assert_equal 900, response.parsed_body["tenant_id"]
+  end
+
+  test "re-sync with unchanged context reports unchanged header" do
+    with_stubbed_host_context({ "user" => { "guid" => "same-user" }, "tenant" => { "id" => 321 } }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-same-a",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
+
+    with_stubbed_host_context({ "user" => { "guid" => "same-user" }, "tenant" => { "id" => 321 } }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-same-b",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+    assert_equal "0", response.headers["X-Omnya-Context-Changed"]
   end
 
   # ── ModuleContextsController CSRF bypass (skip_forgery_protection) ─────────
