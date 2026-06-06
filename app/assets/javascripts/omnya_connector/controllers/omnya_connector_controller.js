@@ -237,11 +237,20 @@ export default class extends Controller {
 
     // [2026-05-28 11:20] Post only once to the resolved host origin to avoid target-origin mismatch errors from origin fan-out.
     // [2026-05-28 11:20] Use "*" only during the initial handshake when the exact parent origin is unknown.
-    const targetOrigin = this.postMessageOrigin()
+    const targetOrigin = this.postMessageOrigin(type)
 
     try {
       window.parent.postMessage(payload, targetOrigin)
     } catch (_error) {
+      if (targetOrigin !== "*") {
+        try {
+          window.parent.postMessage(payload, "*")
+          return
+        } catch (_innerError) {
+          // Ignore postMessage errors and wait for the next host/module handshake message.
+        }
+      }
+
       // Ignore postMessage errors and wait for the next host/module handshake message.
     }
   }
@@ -263,7 +272,14 @@ export default class extends Controller {
     }
   }
 
-  postMessageOrigin() {
+  postMessageOrigin(type) {
+    // During the initial handshake the inferred referrer origin can be stale
+    // (for example when environments are switched). Use wildcard until the host
+    // has explicitly identified itself via a trusted context message.
+    if (!this.hostConnected && this.handshakeMessageType(type)) {
+      return "*"
+    }
+
     if (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin)) {
       return this.activeHostOrigin
     }
@@ -277,6 +293,14 @@ export default class extends Controller {
     // During the initial iframe handshake the parent origin might not be inferable
     // (for example due to strict referrer policy), so use wildcard once until host replies.
     return "*"
+  }
+
+  handshakeMessageType(type) {
+    return [
+      "external-module:ready",
+      "external-module:request-context",
+      "external-module:request-theme"
+    ].includes(type)
   }
 
   autonomousLabel(value) {

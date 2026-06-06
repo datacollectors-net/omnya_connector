@@ -195,6 +195,12 @@ Optional status panel targets: `connectionStatus`, `contextStatus`, `userLogin`,
 
 Once the postMessage handshake with the host completes and `activeHostOrigin` is established, the controller automatically injects an `X-Omnya-Embedded-Host-Origin` header on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event) and on the `POST /module_context` call. This header carries the trusted host origin and is used by `trusted_embedded_origin_request?` on the server to bypass CSRF verification for embedded write actions when third-party cookie restrictions make normal CSRF token matching impossible. The header is only injected when the origin is in `host_app_origins`, so it is never sent for untrusted origins.
 
+#### Handshake target-origin behavior
+
+For initial handshake messages (`external-module:ready`, `external-module:request-context`, `external-module:request-theme`), the controller posts to `"*"` until the host is confirmed. This avoids target-origin mismatch errors when an inferred referrer origin is stale (for example switching between localhost and a hosted environment).
+
+After the first trusted host context message, the controller pins `activeHostOrigin` and uses that specific origin for subsequent messages. If a concrete-origin post fails, it retries once with `"*"` to recover the handshake without requiring a page reload.
+
 #### Context re-sync on tenant switch
 
 After each successful context sync, the controller persists the host context server-side and compares a fingerprint of `user.guid` + `tenant.id` with the last synced value stored in `sessionStorage`.
