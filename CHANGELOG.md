@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gem packaging metadata updated for private GitHub Packages publishing (`allowed_push_host`, documentation URI, bug tracker URI)
 - README installation updated to use the GitHub Packages source block
 - Added documented local and GitHub Actions private release flow
+- Host context re-sync now immediately invalidates stale tenant context on tenant switch by updating request-local context stores atomically and triggering a fingerprint-based embedded page reload when `user.guid`/`tenant.id` changes
 
 ## [0.1.0] - 2026-05-17
 

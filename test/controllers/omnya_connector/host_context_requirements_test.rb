@@ -52,6 +52,44 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
     end
   end
 
+  test "embedded tenant switch re-sync immediately uses new tenant context" do
+    with_autonomous_values("autonomous-user", 456) do
+      with_stubbed_host_context({ "user" => { "guid" => "embedded-user" }, "tenant" => { "id" => 77 } }) do
+        post omnya_connector.module_context_url, params: {
+          module_context: {
+            token: "token-embedded-a",
+            context_endpoint: "https://host.example.test/external_modules/context",
+            module_key: Rails.application.config.x.omnya_connector.module_key
+          }
+        }
+      end
+
+      assert_response :no_content
+
+      with_stubbed_host_context({ "user" => { "guid" => "embedded-user" }, "tenant" => { "id" => 88 } }) do
+        post omnya_connector.module_context_url, params: {
+          module_context: {
+            token: "token-embedded-b",
+            context_endpoint: "https://host.example.test/external_modules/context",
+            module_key: Rails.application.config.x.omnya_connector.module_key
+          }
+        }
+      end
+
+      assert_response :no_content
+
+      get host_context_probe_url,
+        headers: {
+          "Origin" => TRUSTED_ORIGIN,
+          "Accept" => "application/json"
+        }
+
+      assert_response :success
+      assert_equal "embedded-user", response.parsed_body["user_guid"]
+      assert_equal 88, response.parsed_body["tenant_id"]
+    end
+  end
+
   private
 
   def host_context_probe_url

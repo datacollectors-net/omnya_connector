@@ -106,6 +106,42 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :no_content
   end
 
+  test "re-sync with new tenant immediately replaces stored tenant context" do
+    with_stubbed_host_context({ "user" => { "guid" => "switch-user" }, "tenant" => { "id" => 700 } }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-switch-a",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+
+    with_stubbed_host_context({ "user" => { "guid" => "switch-user" }, "tenant" => { "id" => 900 } }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-switch-b",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+
+    get "/host_context_probe",
+      headers: {
+        "Origin" => "https://host.example.test",
+        "Accept" => "application/json"
+      }
+
+    assert_response :success
+    assert_equal "switch-user", response.parsed_body["user_guid"]
+    assert_equal 900, response.parsed_body["tenant_id"]
+  end
+
   # ── ModuleContextsController CSRF bypass (skip_forgery_protection) ─────────
   #
   # ModuleContextsController unconditionally skips CSRF. These tests verify the

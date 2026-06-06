@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000
 const REFRESH_WAIT_TIMEOUT_MS = 5000
-const CONTEXT_SYNC_RELOADED_KEY = "omnya_connector_context_sync_reloaded"
+const CONTEXT_SYNC_FINGERPRINT_KEY = "omnya_connector_context_sync_fingerprint"
 
 // If the engine is mounted at a prefix (e.g. mount OmnyaConnector::Engine => "/my_prefix"),
 // adjust this path accordingly (e.g. "/my_prefix/module_context").
@@ -33,9 +33,7 @@ export default class extends Controller {
     this.refreshTimer = null
     this.refreshResolver = null
     this.refreshTimeoutId = null
-    this.contextSyncReloaded = false
-
-    this.initializeContextSyncReloadState()
+    this.contextSyncFingerprint = this.readContextSyncFingerprint()
 
     this.boundMessageHandler = this.handleMessage.bind(this)
     this.boundContextUpdated = this.handleContextUpdatedEvent.bind(this)
@@ -145,6 +143,7 @@ export default class extends Controller {
           Authorization: `Bearer ${this.token}`,
           Accept: "application/json"
         },
+        cache: "no-store",
         credentials: "omit"
       })
 
@@ -182,7 +181,7 @@ export default class extends Controller {
 
       this.retryAfterUnauthorized = false
       this.dispatchEvent("module:context-updated", { context })
-      this.reloadAfterContextSyncIfNeeded()
+      this.reloadAfterContextSyncIfNeeded(context)
     } catch (_error) {
       this.dispatchEvent("module:context-unavailable", {
         message: "Host connection is unavailable."
@@ -401,35 +400,38 @@ export default class extends Controller {
     return id ? `${label} [${id}]` : label
   }
 
-  initializeContextSyncReloadState() {
-    this.contextSyncReloaded = this.readContextSyncReloadedFlag()
-  }
-
-  reloadAfterContextSyncIfNeeded() {
-    if (this.contextSyncReloaded) {
+  reloadAfterContextSyncIfNeeded(context) {
+    const nextFingerprint = this.contextFingerprint(context)
+    if (!nextFingerprint) {
       return
     }
 
-    this.contextSyncReloaded = true
-    this.writeContextSyncReloadedFlag(true)
+    if (this.contextSyncFingerprint === nextFingerprint) {
+      return
+    }
+
+    this.contextSyncFingerprint = nextFingerprint
+    this.writeContextSyncFingerprint(nextFingerprint)
     window.location.reload()
   }
 
-  readContextSyncReloadedFlag() {
+  contextFingerprint(context) {
+    const userGuid = String(context?.user?.guid || "").trim()
+    const tenantId = String(context?.tenant?.id || "").trim()
+    return userGuid && tenantId ? `${userGuid}:${tenantId}` : null
+  }
+
+  readContextSyncFingerprint() {
     try {
-      return window.sessionStorage.getItem(CONTEXT_SYNC_RELOADED_KEY) === "1"
+      return window.sessionStorage.getItem(CONTEXT_SYNC_FINGERPRINT_KEY)
     } catch (_error) {
-      return false
+      return null
     }
   }
 
-  writeContextSyncReloadedFlag(value) {
+  writeContextSyncFingerprint(value) {
     try {
-      if (value) {
-        window.sessionStorage.setItem(CONTEXT_SYNC_RELOADED_KEY, "1")
-      } else {
-        window.sessionStorage.removeItem(CONTEXT_SYNC_RELOADED_KEY)
-      }
+      window.sessionStorage.setItem(CONTEXT_SYNC_FINGERPRINT_KEY, value)
     } catch (_error) {
       // Ignore storage limitations and continue without persisted reload state.
     }

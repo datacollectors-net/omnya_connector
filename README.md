@@ -195,6 +195,13 @@ Optional status panel targets: `connectionStatus`, `contextStatus`, `userLogin`,
 
 Once the postMessage handshake with the host completes and `activeHostOrigin` is established, the controller automatically injects an `X-Omnya-Embedded-Host-Origin` header on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event) and on the `POST /module_context` call. This header carries the trusted host origin and is used by `trusted_embedded_origin_request?` on the server to bypass CSRF verification for embedded write actions when third-party cookie restrictions make normal CSRF token matching impossible. The header is only injected when the origin is in `host_app_origins`, so it is never sent for untrusted origins.
 
+#### Context re-sync on tenant switch
+
+After each successful context sync, the controller persists the host context server-side and compares a fingerprint of `user.guid` + `tenant.id` with the last synced value stored in `sessionStorage`.
+
+- If the fingerprint changed (for example, the host tenant switched), the page is reloaded immediately so all server-rendered and cached data is refreshed under the new tenant context.
+- If the fingerprint is unchanged, no reload is triggered, which avoids reload loops during periodic refreshes.
+
 ### Browser navigation and bookmarks
 
 The controller automatically reports internal module URL changes to the host application using:

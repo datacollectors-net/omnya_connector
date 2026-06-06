@@ -162,10 +162,18 @@ module OmnyaConnector
     end
 
     def persist_host_context(user_guid, tenant_id)
-      session[:host_context_user_guid] = user_guid
-      session[:host_context_tenant_id] = tenant_id
-      @current_host_user_guid = nil
-      @current_host_tenant_id = nil
+      persisted_user_guid = normalized_host_context_guid(user_guid)
+      persisted_tenant_id = normalized_host_context_id(tenant_id)
+
+      session[:host_context_user_guid] = persisted_user_guid
+      session[:host_context_tenant_id] = persisted_tenant_id
+
+      # Keep all request-local context stores aligned so tenant switches never
+      # read stale values within the same request lifecycle.
+      @current_host_user_guid = persisted_user_guid
+      @current_host_tenant_id = persisted_tenant_id
+      OmnyaConnector::Current.user_guid = persisted_user_guid
+      OmnyaConnector::Current.tenant_id = persisted_tenant_id
 
       log_host_context_state(
         event: "host_context.persisted",
