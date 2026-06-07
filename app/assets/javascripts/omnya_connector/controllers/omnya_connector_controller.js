@@ -400,6 +400,8 @@ export default class extends Controller {
   }
 
   reportCurrentNavigationToHost() {
+    if (!this.hostConnected) return
+
     const modulePath = this.currentModulePath()
     if (!modulePath.startsWith("/")) return
 
@@ -443,7 +445,7 @@ export default class extends Controller {
         this.writeContextSyncFingerprint(nextFingerprint)
       }
 
-      window.location.reload()
+      this.refreshModuleView()
       return
     }
 
@@ -457,6 +459,19 @@ export default class extends Controller {
 
     this.contextSyncFingerprint = nextFingerprint
     this.writeContextSyncFingerprint(nextFingerprint)
+    this.refreshModuleView()
+  }
+
+  refreshModuleView() {
+    const modulePath = this.currentModulePath()
+    if (window.Turbo && typeof window.Turbo.visit === "function") {
+      if (typeof window.Turbo.clearCache === "function") {
+        window.Turbo.clearCache()
+      }
+      window.Turbo.visit(modulePath, { action: "replace" })
+      return
+    }
+
     window.location.reload()
   }
 

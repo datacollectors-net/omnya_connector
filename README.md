@@ -201,6 +201,8 @@ For initial handshake messages (`external-module:ready`, `external-module:reques
 
 After the first trusted host context message, the controller pins `activeHostOrigin` and uses that specific origin for subsequent messages. If a concrete-origin post fails, it retries once with `"*"` to recover the handshake without requiring a page reload.
 
+Navigation reports (`external-module:navigate`) are suppressed until the host handshake is complete, so early Turbo lifecycle events cannot post to a stale inferred origin.
+
 #### Context re-sync on tenant switch
 
 After each successful context sync, the controller persists the host context server-side and compares a fingerprint of `user.guid` + `tenant.id` with the last synced value stored in `sessionStorage`.
@@ -234,6 +236,8 @@ Automatic reporting is triggered on:
 - `turbo:load`
 - `popstate`
 - `hashchange`
+
+Before host connection, navigation events are ignored and only the current module path is reported once the host-connected event fires.
 
 For client-side routing, listen for host-initiated navigation:
 
