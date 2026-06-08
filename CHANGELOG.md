@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added documented local and GitHub Actions private release flow
 - Host context re-sync now immediately invalidates stale tenant context on tenant switch by updating request-local context stores atomically and triggering a fingerprint-based embedded page reload when `user.guid`/`tenant.id` changes
 - Navigation sync now skips pre-handshake `external-module:navigate` posts so initial Turbo events cannot target a stale inferred host origin and trigger browser target-origin mismatch errors
-- Embedded context re-sync now sends a previous fingerprint fallback header (`X-Omnya-Context-Previous-Fingerprint`) so `POST /module_context` can avoid false `X-Omnya-Context-Changed: 1` responses when third-party cookie restrictions prevent session continuity, eliminating continuous reload loops for unchanged user/tenant context
 
 ## [0.1.0] - 2026-05-17
 

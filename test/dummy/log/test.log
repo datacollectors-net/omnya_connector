@@ -2734,3 +2734,5 @@ Completed 204 No Content in 0ms (GC: 0.0ms)
 Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-06 00:37:18 +0200
 Processing by HostContextProbesController#show as JSON
 Completed 200 OK in 1ms (Views: 0.0ms | GC: 0.1ms)
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.

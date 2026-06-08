@@ -26,12 +26,6 @@ module OmnyaConnector
 
       previous_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
       previous_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
-      fallback_user_guid, fallback_tenant_id = previous_context_from_fallback_fingerprint
-
-      if previous_user_guid.nil? || previous_tenant_id.nil?
-        previous_user_guid ||= fallback_user_guid
-        previous_tenant_id ||= fallback_tenant_id
-      end
 
       persist_host_context(user_guid, tenant_id)
 
@@ -75,20 +69,6 @@ module OmnyaConnector
       )
       clear_host_context_session!
       render json: { error: "invalid_context" }, status: :unauthorized
-    end
-
-    def previous_context_from_fallback_fingerprint
-      fingerprint = request.headers["X-Omnya-Context-Previous-Fingerprint"].to_s.strip
-      return [ nil, nil ] if fingerprint.blank?
-
-      match = fingerprint.match(/\A(.+):([0-9]+)\z/)
-      return [ nil, nil ] unless match
-
-      user_guid = normalized_host_context_guid(match[1])
-      tenant_id = normalized_host_context_id(match[2])
-      return [ nil, nil ] if user_guid.nil? || tenant_id.nil?
-
-      [ user_guid, tenant_id ]
     end
   end
 end
