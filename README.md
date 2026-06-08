@@ -209,6 +209,8 @@ After each successful context sync, the controller persists the host context ser
 
 `POST /module_context` also returns `X-Omnya-Context-Changed` (`1`/`0`) and `X-Omnya-Context-Fingerprint` headers. The controller treats `X-Omnya-Context-Changed: 1` as authoritative and forces a reload immediately.
 
+To avoid reload loops when third-party cookie restrictions break session continuity across embedded requests, the controller also sends `X-Omnya-Context-Previous-Fingerprint` with the last fingerprint from `sessionStorage`. When the server cannot read prior host context from session, it uses this fallback fingerprint to determine whether context actually changed.
+
 - If the fingerprint changed (for example, the host tenant switched), the page is reloaded immediately so all server-rendered and cached data is refreshed under the new tenant context.
 - If the fingerprint is unchanged, no reload is triggered, which avoids reload loops during periodic refreshes.
 

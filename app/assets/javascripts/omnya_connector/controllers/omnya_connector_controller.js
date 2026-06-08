@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000
 const REFRESH_WAIT_TIMEOUT_MS = 5000
 const CONTEXT_SYNC_FINGERPRINT_KEY = "omnya_connector_context_sync_fingerprint"
+const CONTEXT_PREVIOUS_FINGERPRINT_HEADER = "X-Omnya-Context-Previous-Fingerprint"
 
 // If the engine is mounted at a prefix (e.g. mount OmnyaConnector::Engine => "/my_prefix"),
 // adjust this path accordingly (e.g. "/my_prefix/module_context").
@@ -316,6 +317,7 @@ export default class extends Controller {
       const embeddedHostHeaders = (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin))
         ? { "X-Omnya-Embedded-Host-Origin": this.activeHostOrigin }
         : {}
+      const previousFingerprint = this.previousContextFingerprint()
 
       const response = await fetch(MODULE_CONTEXT_PATH, {
         method: "POST",
@@ -323,6 +325,7 @@ export default class extends Controller {
           "Content-Type": "application/json",
           "Accept": "application/json",
           "X-CSRF-Token": this.csrfToken(),
+          ...(previousFingerprint ? { [CONTEXT_PREVIOUS_FINGERPRINT_HEADER]: previousFingerprint } : {}),
           ...embeddedHostHeaders
         },
         credentials: "same-origin",
@@ -495,6 +498,11 @@ export default class extends Controller {
     } catch (_error) {
       // Ignore storage limitations and continue without persisted reload state.
     }
+  }
+
+  previousContextFingerprint() {
+    const value = String(this.contextSyncFingerprint || "").trim()
+    return value.length > 0 ? value : null
   }
 
   handleContextUnavailableEvent(event) {

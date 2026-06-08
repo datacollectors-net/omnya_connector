@@ -2,7 +2,7 @@ module OmnyaConnector
   class Configuration
     DEV_DEFAULT_ORIGINS = [
       "https://localhost:3020",
-      "https://fugro.dcdev.eu:3443",
+      "https://*.dcdev.eu:3443",
       "https://127.0.0.1:3020",
       "https://localhost:5173",
       "https://127.0.0.1:5173"
