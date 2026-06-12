@@ -12,7 +12,7 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 - **Browser URL sync** — Reports module route changes to the host (`external-module:navigate`) so bookmarks and browser back/forward work
 - **Dark-mode / theme sync** — Applies the host's light/dark/system preference to the module page via `data-host-theme-preference` and the `dark` CSS class
 - **Ruby DSL configuration** — `OmnyaConnector.configure` block with ENV variable fallback
-- **Production validation** — Enforces HTTPS-only origins, no wildcards, explicit origin list, module key presence
+- **Production validation** — Enforces HTTPS-only origins, explicit origin list, module key presence, and scoped wildcard-only policy for approved domain families
 
 ## Installation
 

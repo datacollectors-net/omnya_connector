@@ -1,7 +1,11 @@
 module OmnyaConnector
   class Configuration
+    PRODUCTION_ALLOWED_WILDCARD_BASE_DOMAINS = %w[
+      omnya-app.com
+      omnya.nl
+    ].freeze
+
     DEV_DEFAULT_ORIGINS = [
-      "https://*.omnya-app.com",
       "https://localhost:3020",
       "https://*.dcdev.eu:3443",
       "https://127.0.0.1:3020",
@@ -86,15 +90,25 @@ module OmnyaConnector
         raise "HOST_APP_ORIGINS must include at least one allowed host origin in production"
       end
 
-      wildcard_origin = origins.find { |origin| origin.include?("*") }
-      if wildcard_origin
-        raise "HOST_APP_ORIGINS cannot include wildcard origins in production"
-      end
-
       insecure_origin = origins.find { |origin| !origin.start_with?("https://") }
       if insecure_origin
         raise "HOST_APP_ORIGINS must use https origins in production"
       end
+
+      invalid_wildcard_origin = origins.find do |origin|
+        OmnyaConnector::OriginMatcher.wildcard_rule?(origin) && !valid_production_wildcard_origin?(origin)
+      end
+      if invalid_wildcard_origin
+        raise "HOST_APP_ORIGINS wildcard origins in production must match approved domains: https://*.omnya-app.com, https://*.omnya.nl"
+      end
+    end
+
+    def valid_production_wildcard_origin?(origin)
+      match = origin.to_s.strip.match(/\Ahttps:\/\/\*\.([a-z0-9.-]+)\z/i)
+      return false unless match
+
+      wildcard_base_domain = match[1].downcase
+      PRODUCTION_ALLOWED_WILDCARD_BASE_DOMAINS.include?(wildcard_base_domain)
     end
 
     def parse_autonomous_guid(value, env, default:)

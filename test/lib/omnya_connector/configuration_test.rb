@@ -83,7 +83,21 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     assert_equal [ "https://dsl.example" ], config[:host_app_origins]
   end
 
-  test "rejects wildcard origins in production" do
+  test "allows approved wildcard origins in production" do
+    env = ActiveSupport::StringInquirer.new("production")
+
+    OmnyaConnector.configure do |c|
+      c.module_key = "module-posts"
+      c.host_app_origins = "https://*.omnya-app.com,https://*.omnya.nl"
+      c.host_app_origins_explicitly_set = true
+    end
+
+    config = OmnyaConnector.configuration.build(env)
+
+    assert_equal [ "https://*.omnya-app.com", "https://*.omnya.nl" ], config[:host_app_origins]
+  end
+
+  test "rejects non-approved wildcard origins in production" do
     env = ActiveSupport::StringInquirer.new("production")
 
     OmnyaConnector.configure do |c|
@@ -96,7 +110,23 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
       OmnyaConnector.configuration.build(env)
     end
 
-    assert_match "cannot include wildcard", error.message
+    assert_match "wildcard origins in production must match approved domains", error.message
+  end
+
+  test "rejects malformed wildcard origins in production" do
+    env = ActiveSupport::StringInquirer.new("production")
+
+    OmnyaConnector.configure do |c|
+      c.module_key = "module-posts"
+      c.host_app_origins = "https://host*.omnya-app.com"
+      c.host_app_origins_explicitly_set = true
+    end
+
+    error = assert_raises(RuntimeError) do
+      OmnyaConnector.configuration.build(env)
+    end
+
+    assert_match "wildcard origins in production must match approved domains", error.message
   end
 
   test "requires host origins to be explicitly set in production" do

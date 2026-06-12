@@ -88,7 +88,7 @@ module OmnyaConnector
       # Check 1: Cross-origin request where the Origin header names a trusted host.
       # This covers the canonical embedded case where the host domain differs from the module domain.
       origin = effective_request_origin
-      return true if origin.present? && origin != request.base_url && omnya_connector_host_app_origins.include?(origin)
+      return true if origin.present? && origin != request.base_url && trusted_origin?(origin)
 
       # Check 2: Turbo/fetch requests issued from within the module iframe itself carry
       # Origin == module base_url (same origin), Origin "null" (sandboxed iframe), or no Origin
@@ -103,7 +103,11 @@ module OmnyaConnector
       embedded_host = request.headers["X-Omnya-Embedded-Host-Origin"].to_s.strip.presence
       return false if embedded_host.blank?
 
-      omnya_connector_host_app_origins.include?(embedded_host)
+      trusted_origin?(embedded_host)
+    end
+
+    def trusted_origin?(origin)
+      OmnyaConnector::OriginMatcher.origin_allowed?(origin, omnya_connector_host_app_origins)
     end
 
     def effective_request_origin

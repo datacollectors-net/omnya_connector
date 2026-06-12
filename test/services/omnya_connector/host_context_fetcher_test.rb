@@ -48,4 +48,42 @@ class OmnyaConnector::HostContextFetcherTest < ActiveSupport::TestCase
 
     assert_kind_of OmnyaConnector::HostContextFetcher::Error, error
   end
+
+  test "accepts context endpoint on trusted wildcard subdomain" do
+    network_called = false
+    original_start = Net::HTTP.method(:start)
+
+    Net::HTTP.define_singleton_method(:start) do |_host, _port, **_opts|
+      network_called = true
+      raise "network_called"
+    end
+
+    begin
+      error = assert_raises(RuntimeError) do
+        OmnyaConnector::HostContextFetcher.call(
+          token: "valid-token",
+          context_endpoint: "https://tenant-a.omnya-app.com/context",
+          allowed_origins: [ "https://*.omnya-app.com" ]
+        )
+      end
+
+      assert_equal "network_called", error.message
+    ensure
+      Net::HTTP.define_singleton_method(:start, original_start)
+    end
+
+    assert_equal true, network_called
+  end
+
+  test "rejects lookalike context endpoint when wildcard origin configured" do
+    error = assert_raises(OmnyaConnector::HostContextFetcher::Error) do
+      OmnyaConnector::HostContextFetcher.call(
+        token: "valid-token",
+        context_endpoint: "https://tenant-a.omnya-app.com.evil.example/context",
+        allowed_origins: [ "https://*.omnya-app.com" ]
+      )
+    end
+
+    assert_equal "untrusted_context_endpoint", error.message
+  end
 end

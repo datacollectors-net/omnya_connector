@@ -13,7 +13,7 @@ module OmnyaConnector
       uri = URI.parse(context_endpoint)
       endpoint_origin = origin_for(uri)
 
-      unless allowed_origins.include?(endpoint_origin)
+      unless OmnyaConnector::OriginMatcher.origin_allowed?(endpoint_origin, allowed_origins)
         raise Error, "untrusted_context_endpoint"
       end
 

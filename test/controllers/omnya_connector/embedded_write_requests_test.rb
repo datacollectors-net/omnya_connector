@@ -132,6 +132,24 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
     end
   end
 
+  test "DELETE from wildcard-trusted origin succeeds without CSRF token" do
+    with_host_app_origins([ "https://*.omnya-app.com" ]) do
+      with_embedded_csrf_enforcement do
+        delete widget_url(1), headers: { "Origin" => "https://tenant-a.omnya-app.com" }
+        assert_response :no_content
+      end
+    end
+  end
+
+  test "DELETE from lookalike origin is rejected when wildcard trusted origin configured" do
+    with_host_app_origins([ "https://*.omnya-app.com" ]) do
+      with_embedded_csrf_enforcement do
+        delete widget_url(1), headers: { "Origin" => "https://tenant-a.omnya-app.com.evil.example" }
+        assert_response :unprocessable_content
+      end
+    end
+  end
+
   test "POST with trusted X-Omnya-Embedded-Host-Origin and module-origin Origin succeeds" do
     with_embedded_csrf_enforcement do
       post widgets_url, headers: {
@@ -190,5 +208,13 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
   ensure
     Rails.application.config.x.omnya_connector.autonomous_user_guid = original_user_guid
     Rails.application.config.x.omnya_connector.autonomous_tenant_id = original_tenant_id
+  end
+
+  def with_host_app_origins(origins)
+    original_origins = Rails.application.config.x.omnya_connector.host_app_origins
+    Rails.application.config.x.omnya_connector.host_app_origins = origins
+    yield
+  ensure
+    Rails.application.config.x.omnya_connector.host_app_origins = original_origins
   end
 end

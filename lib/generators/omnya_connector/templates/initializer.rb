@@ -10,7 +10,9 @@ OmnyaConnector.configure do |config|
   # config.module_key = "my-module"
 
   # Comma-separated list of allowed host app origins.
-  # Required and must be explicitly set in production (https only, no wildcards).
+  # Required and must be explicitly set in production (https only).
+  # In production, wildcard origins are only allowed for approved scoped domains,
+  # for example: https://*.omnya-app.com, https://*.omnya.nl.
   # config.host_app_origins = "https://host.example.com"
 
   # Set to true if host_app_origins is explicitly configured (required for production).
