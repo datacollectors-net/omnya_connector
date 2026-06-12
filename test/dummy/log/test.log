@@ -2736,3 +2736,87 @@ Processing by HostContextProbesController#show as JSON
 Completed 200 OK in 1ms (Views: 0.0ms | GC: 0.1ms)
 Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
 Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+-------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_POST_/module_context_succeeds_without_CSRF_token_and_no_origin_signals
+-------------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "t", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 2ms (GC: 0.0ms)
+-----------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_invalid_module_key
+-----------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => "wrong-key"}}
+Completed 401 Unauthorized in 1ms (Views: 0.1ms | GC: 0.0ms)
+-----------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_context_with_missing_user_guid
+-----------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unprocessable_entity_for_other_fetch_errors
+------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unauthorized_for_fetch_errors_with_unauthorized_message
+------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-expired", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 401 Unauthorized in 0ms (Views: 0.0ms | GC: 0.0ms)
+------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_destroy_clears_host_context
+------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-2", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started DELETE "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#destroy as HTML
+Completed 204 No Content in 1ms (GC: 0.0ms)
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_re-sync_with_new_tenant_immediately_replaces_stored_tenant_context
+---------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-switch-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-switch-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by HostContextProbesController#show as JSON
+Completed 200 OK in 0ms (Views: 0.0ms | GC: 0.0ms)
+----------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_re-sync_with_unchanged_context_reports_unchanged_header
+----------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-same-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-same-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+-------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_creates_context_from_valid_payload
+-------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_POST_/module_context_succeeds_without_CSRF_token_when_Origin_is_module_base_URL
+----------------------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-06-08 17:23:31 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "t", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)

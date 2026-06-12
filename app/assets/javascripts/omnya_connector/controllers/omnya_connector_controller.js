@@ -439,17 +439,10 @@ export default class extends Controller {
 
   reloadAfterContextSyncIfNeeded(context, contextChanged = false) {
     const nextFingerprint = this.contextFingerprint(context)
-    if (contextChanged) {
-      if (nextFingerprint) {
-        this.contextSyncFingerprint = nextFingerprint
-        this.writeContextSyncFingerprint(nextFingerprint)
-      }
-
-      this.refreshModuleView()
-      return
-    }
-
     if (!nextFingerprint) {
+      if (contextChanged) {
+        this.refreshModuleView()
+      }
       return
     }
 
