@@ -13,6 +13,9 @@ OmnyaConnector.configure do |config|
   # Required and must be explicitly set in production (https only).
   # In production, wildcard origins are only allowed for approved scoped domains,
   # for example: https://*.omnya-app.com, https://*.omnya.nl.
+  # Wildcards are supported in both server-side and client-side origin checks and
+  # only match subdomains (the apex domain is not matched by https://*.example.com).
+  # Optional explicit wildcard ports are supported (for example https://*.example.com:3443).
   # config.host_app_origins = "https://host.example.com"
 
   # Set to true if host_app_origins is explicitly configured (required for production).

@@ -55,6 +55,13 @@ end
 All settings fall through to ENV variables when not set via the DSL.
 `log_host_context_state` is initializer-only and does not have an ENV fallback.
 
+Origin matching behavior for `host_app_origins`:
+
+- Exact origins are normalized before matching (`https://host.example.com` matches `https://host.example.com:443`)
+- Wildcard rules must use `https://*.domain` and match subdomains only (the apex `https://domain` does not match)
+- Wildcard rules can include an explicit port (for example `https://*.example.com:3443`) and require that exact port
+- Lookalike suffixes are rejected (`https://tenant.omnya-app.com.evil.example` does not match `https://*.omnya-app.com`)
+
 
 ## Security Notes: 
 ### iframe embedding and CSP

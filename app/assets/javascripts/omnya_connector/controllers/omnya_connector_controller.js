@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { originAllowed as originAllowedByRule } from "./origin_matcher.js"
 
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000
 const REFRESH_WAIT_TIMEOUT_MS = 5000
@@ -221,7 +222,7 @@ export default class extends Controller {
   }
 
   originAllowed(origin) {
-    return this.hostOriginsValue.includes(origin)
+    return originAllowedByRule(origin, this.hostOriginsValue)
   }
 
   postToParent(type, extra = {}) {
