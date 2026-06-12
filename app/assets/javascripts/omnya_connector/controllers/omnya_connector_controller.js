@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { originAllowed as originAllowedByRule } from "./origin_matcher.js"
+import { originAllowed as originAllowedByRule } from "controllers/origin_matcher"
 
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000
 const REFRESH_WAIT_TIMEOUT_MS = 5000
