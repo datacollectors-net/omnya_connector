@@ -1,6 +1,7 @@
 module OmnyaConnector
   class Configuration
     DEV_DEFAULT_ORIGINS = [
+      "https://*.omnya-app.com",
       "https://localhost:3020",
       "https://*.dcdev.eu:3443",
       "https://127.0.0.1:3020",
