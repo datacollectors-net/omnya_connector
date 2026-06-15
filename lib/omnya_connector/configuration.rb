@@ -43,6 +43,7 @@ module OmnyaConnector
       resolved_explicitly_set   = @host_app_origins_explicitly_set || ENV.key?("HOST_APP_ORIGINS")
       resolved_autonomous_guid  = @autonomous_user_guid || ENV["AUTONOMOUS_USER_GUID"]
       resolved_autonomous_tid   = @autonomous_tenant_id || ENV["AUTONOMOUS_TENANT_ID"]
+      resolved_session_cookie_secure = ENV.fetch("SESSION_COOKIE_SECURE", "true") == "true"
       resolved_csrf_bypass      = if @allow_trusted_origin_csrf_bypass.nil?
                                     ENV.fetch("ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS", env.development? ? "true" : "false") == "true"
       else
@@ -50,7 +51,14 @@ module OmnyaConnector
       end
 
       origins = parse_origins(resolved_origins_raw, env)
-      validate_production!(origins, resolved_module_key, resolved_explicitly_set, env)
+      validate_production!(
+        origins,
+        resolved_module_key,
+        resolved_explicitly_set,
+        @configure_session_store,
+        resolved_session_cookie_secure,
+        env
+      )
 
       {
         module_key: resolved_module_key,
@@ -58,6 +66,7 @@ module OmnyaConnector
         primary_host_origin: origins.first.to_s,
         autonomous_user_guid: parse_autonomous_guid(resolved_autonomous_guid, env, default: "dev-user-guid-1"),
         autonomous_tenant_id: parse_autonomous_id(resolved_autonomous_tid, env, default: 1),
+        session_cookie_secure: resolved_session_cookie_secure,
         allow_trusted_origin_csrf_bypass: resolved_csrf_bypass,
         configure_session_store: @configure_session_store,
         log_host_context_state: @log_host_context_state
@@ -75,7 +84,7 @@ module OmnyaConnector
       origins.uniq
     end
 
-    def validate_production!(origins, module_key, explicitly_set, env)
+    def validate_production!(origins, module_key, explicitly_set, configure_session_store, session_cookie_secure, env)
       return unless env.production?
 
       unless explicitly_set
@@ -100,6 +109,10 @@ module OmnyaConnector
       end
       if invalid_wildcard_origin
         raise "HOST_APP_ORIGINS wildcard origins in production must match approved domains: https://*.omnya-app.com, https://*.omnya.nl"
+      end
+
+      if configure_session_store && !session_cookie_secure
+        raise "SESSION_COOKIE_SECURE must be true in production when configure_session_store is enabled"
       end
     end
 

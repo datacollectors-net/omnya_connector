@@ -1,6 +1,35 @@
 require "test_helper"
 
 class OmnyaConnector::EngineTest < ActiveSupport::TestCase
+  test "requires force_ssl in production" do
+    app = build_app_with(policy: nil, host_origins: [ "https://host.example.test" ], force_ssl: false)
+    env = ActiveSupport::StringInquirer.new("production")
+
+    error = assert_raises(RuntimeError) do
+      OmnyaConnector::Engine.send(:ensure_https_enforced!, app, env)
+    end
+
+    assert_match "HTTPS must be enforced in production", error.message
+  end
+
+  test "allows boot when force_ssl is enabled in production" do
+    app = build_app_with(policy: nil, host_origins: [ "https://host.example.test" ], force_ssl: true)
+    env = ActiveSupport::StringInquirer.new("production")
+
+    assert_nothing_raised do
+      OmnyaConnector::Engine.send(:ensure_https_enforced!, app, env)
+    end
+  end
+
+  test "skips HTTPS enforcement outside production" do
+    app = build_app_with(policy: nil, host_origins: [ "https://host.example.test" ], force_ssl: false)
+    env = ActiveSupport::StringInquirer.new("development")
+
+    assert_nothing_raised do
+      OmnyaConnector::Engine.send(:ensure_https_enforced!, app, env)
+    end
+  end
+
   test "content security policy merge is a no-op when policy is nil" do
     app = build_app_with(policy: nil, host_origins: [ "https://host.example.test" ])
 
@@ -38,14 +67,14 @@ class OmnyaConnector::EngineTest < ActiveSupport::TestCase
 
   private
 
-  def build_app_with(policy:, host_origins:)
+  def build_app_with(policy:, host_origins:, force_ssl: true)
     connector = ActiveSupport::OrderedOptions.new
     connector.host_app_origins = host_origins
 
     x_config = ActiveSupport::OrderedOptions.new
     x_config.omnya_connector = connector
 
-    config = Struct.new(:content_security_policy, :x).new(policy, x_config)
+    config = Struct.new(:content_security_policy, :x, :force_ssl).new(policy, x_config, force_ssl)
     Struct.new(:config).new(config)
   end
 end

@@ -177,6 +177,43 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     assert_match "must use https", error.message
   end
 
+  test "requires secure session cookie in production when session store is configured" do
+    env = ActiveSupport::StringInquirer.new("production")
+
+    OmnyaConnector.configure do |c|
+      c.module_key = "module-posts"
+      c.host_app_origins = "https://app.example.com"
+      c.host_app_origins_explicitly_set = true
+      c.configure_session_store = true
+    end
+
+    error = with_env("SESSION_COOKIE_SECURE" => "false") do
+      assert_raises(RuntimeError) do
+        OmnyaConnector.configuration.build(env)
+      end
+    end
+
+    assert_match "SESSION_COOKIE_SECURE must be true in production", error.message
+  end
+
+  test "allows insecure session cookie override in production when session store is managed by host app" do
+    env = ActiveSupport::StringInquirer.new("production")
+
+    OmnyaConnector.configure do |c|
+      c.module_key = "module-posts"
+      c.host_app_origins = "https://app.example.com"
+      c.host_app_origins_explicitly_set = true
+      c.configure_session_store = false
+    end
+
+    config = with_env("SESSION_COOKIE_SECURE" => "false") do
+      OmnyaConnector.configuration.build(env)
+    end
+
+    assert_equal false, config[:configure_session_store]
+    assert_equal false, config[:session_cookie_secure]
+  end
+
   test "configure_session_store defaults to true" do
     config = OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("test"))
 
@@ -204,5 +241,30 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     config = OmnyaConnector.configuration.build(env)
 
     assert_equal true, config[:log_host_context_state]
+  end
+
+  private
+
+  def with_env(overrides)
+    snapshot = overrides.keys.to_h { |key| [ key, ENV[key] ] }
+
+    overrides.each do |key, value|
+      if value.nil?
+        ENV.delete(key)
+      else
+        ENV[key] = value
+      end
+    end
+
+    yield
+  ensure
+    overrides.each_key do |key|
+      original = snapshot[key]
+      if original.nil?
+        ENV.delete(key)
+      else
+        ENV[key] = original
+      end
+    end
   end
 end

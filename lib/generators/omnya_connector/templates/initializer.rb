@@ -4,6 +4,7 @@
 # ENV variables: MODULE_KEY, HOST_APP_ORIGINS, AUTONOMOUS_USER_GUID,
 #                AUTONOMOUS_TENANT_ID, ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS,
 #                SESSION_COOKIE_SECURE
+# Production requires HTTPS deployment (`config.force_ssl = true`) so secure iframe cookies work.
 
 OmnyaConnector.configure do |config|
   # Required in production. Identifies this module to the host application.

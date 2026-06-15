@@ -3,18 +3,20 @@ module OmnyaConnector
     isolate_namespace OmnyaConnector
 
     initializer "omnya_connector.configuration", after: :load_config_initializers do |app|
-    resolved = OmnyaConnector.configuration.build(Rails.env)
+      Engine.send(:ensure_https_enforced!, app, Rails.env)
+      resolved = OmnyaConnector.configuration.build(Rails.env)
 
-    app.config.x.omnya_connector = ActiveSupport::OrderedOptions.new
-    app.config.x.omnya_connector.module_key                       = resolved[:module_key]
-    app.config.x.omnya_connector.host_app_origins                 = resolved[:host_app_origins]
-    app.config.x.omnya_connector.primary_host_origin              = resolved[:primary_host_origin]
-    app.config.x.omnya_connector.autonomous_user_guid             = resolved[:autonomous_user_guid]
-    app.config.x.omnya_connector.autonomous_tenant_id             = resolved[:autonomous_tenant_id]
-    app.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = resolved[:allow_trusted_origin_csrf_bypass]
-    app.config.x.omnya_connector.configure_session_store          = resolved[:configure_session_store]
-    app.config.x.omnya_connector.log_host_context_state           = resolved[:log_host_context_state]
-  end
+      app.config.x.omnya_connector = ActiveSupport::OrderedOptions.new
+      app.config.x.omnya_connector.module_key                       = resolved[:module_key]
+      app.config.x.omnya_connector.host_app_origins                 = resolved[:host_app_origins]
+      app.config.x.omnya_connector.primary_host_origin              = resolved[:primary_host_origin]
+      app.config.x.omnya_connector.autonomous_user_guid             = resolved[:autonomous_user_guid]
+      app.config.x.omnya_connector.autonomous_tenant_id             = resolved[:autonomous_tenant_id]
+      app.config.x.omnya_connector.session_cookie_secure            = resolved[:session_cookie_secure]
+      app.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = resolved[:allow_trusted_origin_csrf_bypass]
+      app.config.x.omnya_connector.configure_session_store          = resolved[:configure_session_store]
+      app.config.x.omnya_connector.log_host_context_state           = resolved[:log_host_context_state]
+    end
 
   # Configure session store for cross-site iframe embedding.
   # SameSite=None is required so session cookies are sent in cross-origin iframe requests.
@@ -25,13 +27,14 @@ module OmnyaConnector
       cfg = app.config.x.omnya_connector
     next unless cfg&.configure_session_store
 
-  default_secure = !Rails.env.test?
-  app.config.session_store(
-    :cookie_store,
-    same_site: :none,
-    httponly: true,
-    secure: ENV.fetch("SESSION_COOKIE_SECURE", default_secure.to_s) == "true"
-  )
+    default_secure = !Rails.env.test?
+    secure_cookie = cfg.session_cookie_secure.nil? ? ENV.fetch("SESSION_COOKIE_SECURE", default_secure.to_s) == "true" : cfg.session_cookie_secure
+    app.config.session_store(
+      :cookie_store,
+      same_site: :none,
+      httponly: true,
+      secure: secure_cookie
+    )
   end
 
     # Append host app origins to the Content-Security-Policy connect-src directive
@@ -56,6 +59,13 @@ module OmnyaConnector
 
     class << self
       private
+
+      def ensure_https_enforced!(app, env)
+        return unless env.production?
+        return if app.config.force_ssl
+
+        raise "HTTPS must be enforced in production (set config.force_ssl = true) for OmnyaConnector embedded secure-cookie requirements"
+      end
 
       def apply_content_security_policy!(app)
         return unless app.config.respond_to?(:content_security_policy)

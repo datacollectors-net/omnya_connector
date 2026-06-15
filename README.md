@@ -34,6 +34,7 @@ This will:
 1. Mount the engine at `/` in your routes
 2. Add `include OmnyaConnector::ControllerConcern` to your `ApplicationController`
 3. Create `config/initializers/omnya_connector.rb` with configuration template
+4. Run an HTTPS readiness check and print deployment guidance for secure iframe cookies
 
 ## Configuration
 
@@ -143,8 +144,14 @@ Expected result:
 - `Content-Security-Policy` contains `frame-ancestors` for the trusted host origin.
 - Rendered script tags include `nonce="..."` attributes.
 
-### SSL in development mode
-Integration with the Omnya application host will only work properly in development or production when the application is served with SSL. This is mainly due to modern browser requirements enforcing strict security policies on cookies.
+### SSL / HTTPS requirement
+Integration with the Omnya application host only works correctly when the module is served over HTTPS. This is required for modern browser cookie policies affecting iframe contexts.
+
+Production enforcement:
+
+- `config.force_ssl` must be set to `true` (the engine fails fast at boot in production when absent).
+- `SESSION_COOKIE_SECURE` must be `true` when `configure_session_store` is enabled (the engine fails fast in production when set to `false`).
+- Reverse proxy / load balancer deployments must forward HTTPS correctly (for example `X-Forwarded-Proto: https`).
 
 ## Usage
 
@@ -383,7 +390,7 @@ Edit the generated initializer file at `config/initializers/omnya_connector.rb` 
 ```ruby
 OmnyaConnector.configure do |config|
   config.module_key = ENV["MODULE_KEY"]
-  config.host_origins = ["https://example.com"]
+  config.host_app_origins = "https://example.com"
 end
 ```
 
@@ -407,7 +414,9 @@ You can customize the module’s appearance and behavior by editing the files in
 ### 8. Deploy to Production
 
 Before deploying, ensure the following:
-- `config.host_origins` is set to a secure, HTTPS-only list of origins.
+- `config.host_app_origins` is set to a secure, HTTPS-only list of origins.
+- `config.force_ssl = true` is present in `config/environments/production.rb`.
+- `SESSION_COOKIE_SECURE=true` in production when `configure_session_store` is enabled.
 - All environment variables are correctly configured.
 - The application is tested in a production-like environment.
 
