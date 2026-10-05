@@ -3128,3 +3128,7 @@ OmnyaConnector::EngineTest: test_allows_boot_when_force_ssl_is_enabled_in_produc
 ---------------------------------------------------------------------------
 OmnyaConnector::EngineTest: test_skips_HTTPS_enforcement_outside_production
 ---------------------------------------------------------------------------
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.

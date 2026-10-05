@@ -21,15 +21,22 @@ module OmnyaConnector
 
       user_guid = normalized_host_context_guid(context.dig("user", "guid"))
       tenant_id = normalized_host_context_id(context.dig("tenant", "id"))
+      user_time_zone = normalized_host_context_locale_value(context.dig("user", "time_zone"))
+      user_language = normalized_host_context_locale_value(context.dig("user", "language"))
 
       return render_invalid_context(user_guid, tenant_id) if user_guid.nil? || tenant_id.nil?
 
       previous_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
       previous_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
+      previous_user_time_zone = normalized_host_context_locale_value(session[:host_context_user_time_zone])
+      previous_user_language = normalized_host_context_locale_value(session[:host_context_user_language])
 
-      persist_host_context(user_guid, tenant_id)
+      persist_host_context(user_guid, tenant_id, user_time_zone, user_language)
 
-      context_changed = previous_user_guid != user_guid || previous_tenant_id != tenant_id
+      context_changed = previous_user_guid != user_guid ||
+            previous_tenant_id != tenant_id ||
+            previous_user_time_zone != user_time_zone ||
+            previous_user_language != user_language
       response.set_header("X-Omnya-Context-Changed", context_changed ? "1" : "0")
       response.set_header("X-Omnya-Context-Fingerprint", "#{user_guid}:#{tenant_id}")
 

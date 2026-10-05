@@ -18,7 +18,10 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
 
   test "embedded request with valid session returns session-backed host context" do
     with_autonomous_values("autonomous-user", 456) do
-      with_stubbed_host_context({ "user" => { "guid" => "embedded-user" }, "tenant" => { "id" => 77 } }) do
+      with_stubbed_host_context({
+        "user" => { "guid" => "embedded-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
+        "tenant" => { "id" => 77 }
+      }) do
         post omnya_connector.module_context_url, params: {
           module_context: {
             token: "token-embedded",
@@ -39,22 +42,29 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
       assert_response :success
       assert_equal "embedded-user", response.parsed_body["user_guid"]
       assert_equal 77, response.parsed_body["tenant_id"]
+      assert_equal "Europe/Amsterdam", response.parsed_body["user_time_zone"]
+      assert_equal "nl", response.parsed_body["user_language"]
     end
   end
 
   test "standalone request still uses autonomous fallback in development-style mode" do
-    with_autonomous_values("autonomous-user", 456) do
+    with_autonomous_values("autonomous-user", 456, "America/New_York", "en-US") do
       get host_context_probe_url, headers: { "Accept" => "application/json" }
 
       assert_response :success
       assert_equal "autonomous-user", response.parsed_body["user_guid"]
       assert_equal 456, response.parsed_body["tenant_id"]
+      assert_equal "America/New_York", response.parsed_body["user_time_zone"]
+      assert_equal "en-US", response.parsed_body["user_language"]
     end
   end
 
   test "embedded tenant switch re-sync immediately uses new tenant context" do
     with_autonomous_values("autonomous-user", 456) do
-      with_stubbed_host_context({ "user" => { "guid" => "embedded-user" }, "tenant" => { "id" => 77 } }) do
+      with_stubbed_host_context({
+        "user" => { "guid" => "embedded-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
+        "tenant" => { "id" => 77 }
+      }) do
         post omnya_connector.module_context_url, params: {
           module_context: {
             token: "token-embedded-a",
@@ -66,7 +76,10 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
 
       assert_response :no_content
 
-      with_stubbed_host_context({ "user" => { "guid" => "embedded-user" }, "tenant" => { "id" => 88 } }) do
+      with_stubbed_host_context({
+        "user" => { "guid" => "embedded-user", "time_zone" => "UTC", "language" => "en" },
+        "tenant" => { "id" => 88 }
+      }) do
         post omnya_connector.module_context_url, params: {
           module_context: {
             token: "token-embedded-b",
@@ -87,6 +100,8 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
       assert_response :success
       assert_equal "embedded-user", response.parsed_body["user_guid"]
       assert_equal 88, response.parsed_body["tenant_id"]
+      assert_equal "UTC", response.parsed_body["user_time_zone"]
+      assert_equal "en", response.parsed_body["user_language"]
     end
   end
 
@@ -96,17 +111,23 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
     "/host_context_probe"
   end
 
-  def with_autonomous_values(user_guid, tenant_id)
+  def with_autonomous_values(user_guid, tenant_id, user_time_zone = nil, user_language = nil)
     original_user_guid = Rails.application.config.x.omnya_connector.autonomous_user_guid
     original_tenant_id = Rails.application.config.x.omnya_connector.autonomous_tenant_id
+    original_user_time_zone = Rails.application.config.x.omnya_connector.autonomous_user_time_zone
+    original_user_language = Rails.application.config.x.omnya_connector.autonomous_user_language
 
     Rails.application.config.x.omnya_connector.autonomous_user_guid = user_guid
     Rails.application.config.x.omnya_connector.autonomous_tenant_id = tenant_id
+    Rails.application.config.x.omnya_connector.autonomous_user_time_zone = user_time_zone
+    Rails.application.config.x.omnya_connector.autonomous_user_language = user_language
 
     yield
   ensure
     Rails.application.config.x.omnya_connector.autonomous_user_guid = original_user_guid
     Rails.application.config.x.omnya_connector.autonomous_tenant_id = original_tenant_id
+    Rails.application.config.x.omnya_connector.autonomous_user_time_zone = original_user_time_zone
+    Rails.application.config.x.omnya_connector.autonomous_user_language = original_user_language
   end
 
   def with_stubbed_host_context(payload)

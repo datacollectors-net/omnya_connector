@@ -20,6 +20,8 @@ module OmnyaConnector
                   :host_app_origins_explicitly_set,
                   :autonomous_user_guid,
                   :autonomous_tenant_id,
+                  :autonomous_user_time_zone,
+                  :autonomous_user_language,
                   :allow_trusted_origin_csrf_bypass,
                   :configure_session_store,
                   :log_host_context_state
@@ -30,6 +32,8 @@ module OmnyaConnector
       @host_app_origins_explicitly_set = false
       @autonomous_user_guid = nil
       @autonomous_tenant_id = nil
+      @autonomous_user_time_zone = nil
+      @autonomous_user_language = nil
       @allow_trusted_origin_csrf_bypass = nil
       @configure_session_store = true
       @log_host_context_state = false
@@ -43,6 +47,8 @@ module OmnyaConnector
       resolved_explicitly_set   = @host_app_origins_explicitly_set || ENV.key?("HOST_APP_ORIGINS")
       resolved_autonomous_guid  = @autonomous_user_guid || ENV["AUTONOMOUS_USER_GUID"]
       resolved_autonomous_tid   = @autonomous_tenant_id || ENV["AUTONOMOUS_TENANT_ID"]
+      resolved_autonomous_tz    = @autonomous_user_time_zone || ENV["AUTONOMOUS_USER_TIME_ZONE"]
+      resolved_autonomous_lang  = @autonomous_user_language || ENV["AUTONOMOUS_USER_LANGUAGE"]
       resolved_session_cookie_secure = ENV.fetch("SESSION_COOKIE_SECURE", "true") == "true"
       resolved_csrf_bypass      = if @allow_trusted_origin_csrf_bypass.nil?
                                     ENV.fetch("ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS", env.development? ? "true" : "false") == "true"
@@ -66,6 +72,8 @@ module OmnyaConnector
         primary_host_origin: origins.first.to_s,
         autonomous_user_guid: parse_autonomous_guid(resolved_autonomous_guid, env, default: "dev-user-guid-1"),
         autonomous_tenant_id: parse_autonomous_id(resolved_autonomous_tid, env, default: 1),
+        autonomous_user_time_zone: parse_autonomous_locale_value(resolved_autonomous_tz, env, default: "UTC"),
+        autonomous_user_language: parse_autonomous_locale_value(resolved_autonomous_lang, env, default: "en"),
         session_cookie_secure: resolved_session_cookie_secure,
         allow_trusted_origin_csrf_bypass: resolved_csrf_bypass,
         configure_session_store: @configure_session_store,
@@ -136,6 +144,11 @@ module OmnyaConnector
       Integer(raw_value)
     rescue ArgumentError
       nil
+    end
+
+    def parse_autonomous_locale_value(value, env, default:)
+      raw_value = value.presence || (env.development? ? default : nil)
+      raw_value.to_s.strip.presence
     end
   end
 end

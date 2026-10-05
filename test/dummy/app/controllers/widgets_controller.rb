@@ -14,5 +14,7 @@ class WidgetsController < ApplicationController
   def expose_current_host_context_headers
     response.set_header("X-Omnya-Current-User-Guid", OmnyaConnector::Current.user_guid) if OmnyaConnector::Current.user_guid.present?
     response.set_header("X-Omnya-Current-Tenant-Id", OmnyaConnector::Current.tenant_id) if OmnyaConnector::Current.tenant_id.present?
+    response.set_header("X-Omnya-Current-User-Time-Zone", OmnyaConnector::Current.user_time_zone) if OmnyaConnector::Current.user_time_zone.present?
+    response.set_header("X-Omnya-Current-User-Language", OmnyaConnector::Current.user_language) if OmnyaConnector::Current.user_language.present?
   end
 end

@@ -12,6 +12,8 @@ module OmnyaConnector
       app.config.x.omnya_connector.primary_host_origin              = resolved[:primary_host_origin]
       app.config.x.omnya_connector.autonomous_user_guid             = resolved[:autonomous_user_guid]
       app.config.x.omnya_connector.autonomous_tenant_id             = resolved[:autonomous_tenant_id]
+      app.config.x.omnya_connector.autonomous_user_time_zone        = resolved[:autonomous_user_time_zone]
+      app.config.x.omnya_connector.autonomous_user_language         = resolved[:autonomous_user_language]
       app.config.x.omnya_connector.session_cookie_secure            = resolved[:session_cookie_secure]
       app.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = resolved[:allow_trusted_origin_csrf_bypass]
       app.config.x.omnya_connector.configure_session_store          = resolved[:configure_session_store]

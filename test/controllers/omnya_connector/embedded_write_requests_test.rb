@@ -23,22 +23,26 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
   end
 
   test "embedded requests do not use autonomous fallback values" do
-    with_autonomous_values("autonomous-user", 456) do
+    with_autonomous_values("autonomous-user", 456, "America/New_York", "en-US") do
       with_embedded_csrf_enforcement do
         delete widget_url(1), headers: { "Origin" => TRUSTED_ORIGIN }
         assert_response :no_content
         assert_nil response.headers["X-Omnya-Current-User-Guid"]
         assert_nil response.headers["X-Omnya-Current-Tenant-Id"]
+        assert_nil response.headers["X-Omnya-Current-User-Time-Zone"]
+        assert_nil response.headers["X-Omnya-Current-User-Language"]
       end
     end
   end
 
   test "non-embedded requests can still use autonomous fallback values" do
-    with_autonomous_values("autonomous-user", 456) do
+    with_autonomous_values("autonomous-user", 456, "America/New_York", "en-US") do
       delete widget_url(1)
       assert_response :no_content
       assert_equal "autonomous-user", response.headers["X-Omnya-Current-User-Guid"]
       assert_equal 456, response.headers["X-Omnya-Current-Tenant-Id"]
+      assert_equal "America/New_York", response.headers["X-Omnya-Current-User-Time-Zone"]
+      assert_equal "en-US", response.headers["X-Omnya-Current-User-Language"]
     end
   end
 
@@ -197,17 +201,23 @@ class OmnyaConnector::EmbeddedWriteRequestsTest < ActionDispatch::IntegrationTes
     "/widgets"
   end
 
-  def with_autonomous_values(user_guid, tenant_id)
+  def with_autonomous_values(user_guid, tenant_id, user_time_zone = nil, user_language = nil)
     original_user_guid = Rails.application.config.x.omnya_connector.autonomous_user_guid
     original_tenant_id = Rails.application.config.x.omnya_connector.autonomous_tenant_id
+    original_user_time_zone = Rails.application.config.x.omnya_connector.autonomous_user_time_zone
+    original_user_language = Rails.application.config.x.omnya_connector.autonomous_user_language
 
     Rails.application.config.x.omnya_connector.autonomous_user_guid = user_guid
     Rails.application.config.x.omnya_connector.autonomous_tenant_id = tenant_id
+    Rails.application.config.x.omnya_connector.autonomous_user_time_zone = user_time_zone
+    Rails.application.config.x.omnya_connector.autonomous_user_language = user_language
 
     yield
   ensure
     Rails.application.config.x.omnya_connector.autonomous_user_guid = original_user_guid
     Rails.application.config.x.omnya_connector.autonomous_tenant_id = original_tenant_id
+    Rails.application.config.x.omnya_connector.autonomous_user_time_zone = original_user_time_zone
+    Rails.application.config.x.omnya_connector.autonomous_user_language = original_user_language
   end
 
   def with_host_app_origins(origins)

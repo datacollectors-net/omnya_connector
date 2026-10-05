@@ -4,7 +4,9 @@ class HostContextProbesController < ApplicationController
   def show
     render json: {
       user_guid: OmnyaConnector::Current.user_guid,
-      tenant_id: OmnyaConnector::Current.tenant_id
+      tenant_id: OmnyaConnector::Current.tenant_id,
+      user_time_zone: OmnyaConnector::Current.user_time_zone,
+      user_language: OmnyaConnector::Current.user_language
     }
   end
 end

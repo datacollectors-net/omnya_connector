@@ -5,7 +5,7 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
   test "creates context from valid payload" do
     context_payload = {
-      "user" => { "guid" => "user-guid-77" },
+      "user" => { "guid" => "user-guid-77", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
       "tenant" => { "id" => 700 }
     }
 
@@ -21,6 +21,18 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
     assert_response :no_content
     assert_equal "1", response.headers["X-Omnya-Context-Changed"]
+
+    get "/host_context_probe",
+      headers: {
+        "Origin" => "https://host.example.test",
+        "Accept" => "application/json"
+      }
+
+    assert_response :success
+    assert_equal "user-guid-77", response.parsed_body["user_guid"]
+    assert_equal 700, response.parsed_body["tenant_id"]
+    assert_equal "Europe/Amsterdam", response.parsed_body["user_time_zone"]
+    assert_equal "nl", response.parsed_body["user_language"]
   end
 
   test "rejects invalid module key" do
@@ -108,7 +120,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
   end
 
   test "re-sync with new tenant immediately replaces stored tenant context" do
-    with_stubbed_host_context({ "user" => { "guid" => "switch-user" }, "tenant" => { "id" => 700 } }) do
+    with_stubbed_host_context({
+      "user" => { "guid" => "switch-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
+      "tenant" => { "id" => 700 }
+    }) do
       post omnya_connector.module_context_url, params: {
         module_context: {
           token: "token-switch-a",
@@ -121,7 +136,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :no_content
     assert_equal "1", response.headers["X-Omnya-Context-Changed"]
 
-    with_stubbed_host_context({ "user" => { "guid" => "switch-user" }, "tenant" => { "id" => 900 } }) do
+    with_stubbed_host_context({
+      "user" => { "guid" => "switch-user", "time_zone" => "UTC", "language" => "en" },
+      "tenant" => { "id" => 900 }
+    }) do
       post omnya_connector.module_context_url, params: {
         module_context: {
           token: "token-switch-b",
@@ -143,10 +161,15 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :success
     assert_equal "switch-user", response.parsed_body["user_guid"]
     assert_equal 900, response.parsed_body["tenant_id"]
+    assert_equal "UTC", response.parsed_body["user_time_zone"]
+    assert_equal "en", response.parsed_body["user_language"]
   end
 
   test "re-sync with unchanged context reports unchanged header" do
-    with_stubbed_host_context({ "user" => { "guid" => "same-user" }, "tenant" => { "id" => 321 } }) do
+    with_stubbed_host_context({
+      "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
+      "tenant" => { "id" => 321 }
+    }) do
       post omnya_connector.module_context_url, params: {
         module_context: {
           token: "token-same-a",
@@ -159,7 +182,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     assert_response :no_content
     assert_equal "1", response.headers["X-Omnya-Context-Changed"]
 
-    with_stubbed_host_context({ "user" => { "guid" => "same-user" }, "tenant" => { "id" => 321 } }) do
+    with_stubbed_host_context({
+      "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
+      "tenant" => { "id" => 321 }
+    }) do
       post omnya_connector.module_context_url, params: {
         module_context: {
           token: "token-same-b",
@@ -171,6 +197,40 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
     assert_response :no_content
     assert_equal "0", response.headers["X-Omnya-Context-Changed"]
+  end
+
+  test "re-sync with locale-only changes reports changed header" do
+    with_stubbed_host_context({
+      "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
+      "tenant" => { "id" => 321 }
+    }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-locale-a",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
+
+    with_stubbed_host_context({
+      "user" => { "guid" => "same-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
+      "tenant" => { "id" => 321 }
+    }) do
+      post omnya_connector.module_context_url, params: {
+        module_context: {
+          token: "token-locale-b",
+          context_endpoint: "https://host.example.test/external_modules/context",
+          module_key: Rails.application.config.x.omnya_connector.module_key
+        }
+      }
+    end
+
+    assert_response :no_content
+    assert_equal "1", response.headers["X-Omnya-Context-Changed"]
   end
 
   # ── ModuleContextsController CSRF bypass (skip_forgery_protection) ─────────

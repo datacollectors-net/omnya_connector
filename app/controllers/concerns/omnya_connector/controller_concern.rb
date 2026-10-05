@@ -10,8 +10,12 @@ module OmnyaConnector
                     :omnya_connector_host_app_origins,
                     :omnya_connector_autonomous_user_guid,
                     :omnya_connector_autonomous_tenant_id,
+                    :omnya_connector_autonomous_user_time_zone,
+                    :omnya_connector_autonomous_user_language,
                     :current_host_user_guid,
-                    :current_host_tenant_id
+                    :current_host_tenant_id,
+                    :current_host_user_time_zone,
+                    :current_host_user_language
     end
 
     private
@@ -36,15 +40,39 @@ module OmnyaConnector
       @current_host_tenant_id ||= omnya_connector_autonomous_tenant_id || autonomous_default_id
     end
 
+    def current_host_user_time_zone
+      return @current_host_user_time_zone if defined?(@current_host_user_time_zone)
+
+      @current_host_user_time_zone = normalized_host_context_locale_value(session[:host_context_user_time_zone])
+      return @current_host_user_time_zone if @current_host_user_time_zone.present?
+      return @current_host_user_time_zone = nil if embedded_request?
+
+      @current_host_user_time_zone ||= omnya_connector_autonomous_user_time_zone || autonomous_default_time_zone
+    end
+
+    def current_host_user_language
+      return @current_host_user_language if defined?(@current_host_user_language)
+
+      @current_host_user_language = normalized_host_context_locale_value(session[:host_context_user_language])
+      return @current_host_user_language if @current_host_user_language.present?
+      return @current_host_user_language = nil if embedded_request?
+
+      @current_host_user_language ||= omnya_connector_autonomous_user_language || autonomous_default_language
+    end
+
     def assign_current_host_context
       log_host_context_state(event: "host_context.assign.before")
       OmnyaConnector::Current.user_guid = current_host_user_guid
       OmnyaConnector::Current.tenant_id = current_host_tenant_id
+      OmnyaConnector::Current.user_time_zone = current_host_user_time_zone
+      OmnyaConnector::Current.user_language = current_host_user_language
       log_host_context_state(
         event: "host_context.assign.after",
         details: {
           resolved_user_guid: OmnyaConnector::Current.user_guid,
-          resolved_tenant_id: OmnyaConnector::Current.tenant_id
+          resolved_tenant_id: OmnyaConnector::Current.tenant_id,
+          resolved_user_time_zone: OmnyaConnector::Current.user_time_zone,
+          resolved_user_language: OmnyaConnector::Current.user_language
         }
       )
     end
@@ -54,11 +82,17 @@ module OmnyaConnector
 
       session.delete(:host_context_user_guid)
       session.delete(:host_context_tenant_id)
+      session.delete(:host_context_user_time_zone)
+      session.delete(:host_context_user_language)
 
       @current_host_user_guid = nil
       @current_host_tenant_id = nil
+      @current_host_user_time_zone = nil
+      @current_host_user_language = nil
       OmnyaConnector::Current.user_guid = nil
       OmnyaConnector::Current.tenant_id = nil
+      OmnyaConnector::Current.user_time_zone = nil
+      OmnyaConnector::Current.user_language = nil
 
       log_host_context_state(event: "host_context.clear.after")
     end
@@ -146,12 +180,28 @@ module OmnyaConnector
       Rails.application.config.x.omnya_connector.autonomous_tenant_id
     end
 
+    def omnya_connector_autonomous_user_time_zone
+      Rails.application.config.x.omnya_connector.autonomous_user_time_zone
+    end
+
+    def omnya_connector_autonomous_user_language
+      Rails.application.config.x.omnya_connector.autonomous_user_language
+    end
+
     def autonomous_default_guid
       Rails.env.development? ? "dev-user-guid-1" : nil
     end
 
     def autonomous_default_id
       Rails.env.development? ? 1 : nil
+    end
+
+    def autonomous_default_time_zone
+      Rails.env.development? ? "UTC" : nil
+    end
+
+    def autonomous_default_language
+      Rails.env.development? ? "en" : nil
     end
 
     def normalized_host_context_guid(value)
@@ -165,25 +215,39 @@ module OmnyaConnector
       id&.positive? ? id : nil
     end
 
-    def persist_host_context(user_guid, tenant_id)
+    def normalized_host_context_locale_value(value)
+      value.to_s.strip.presence
+    end
+
+    def persist_host_context(user_guid, tenant_id, user_time_zone = nil, user_language = nil)
       persisted_user_guid = normalized_host_context_guid(user_guid)
       persisted_tenant_id = normalized_host_context_id(tenant_id)
+      persisted_user_time_zone = normalized_host_context_locale_value(user_time_zone)
+      persisted_user_language = normalized_host_context_locale_value(user_language)
 
       session[:host_context_user_guid] = persisted_user_guid
       session[:host_context_tenant_id] = persisted_tenant_id
+      session[:host_context_user_time_zone] = persisted_user_time_zone
+      session[:host_context_user_language] = persisted_user_language
 
       # Keep all request-local context stores aligned so tenant switches never
       # read stale values within the same request lifecycle.
       @current_host_user_guid = persisted_user_guid
       @current_host_tenant_id = persisted_tenant_id
+      @current_host_user_time_zone = persisted_user_time_zone
+      @current_host_user_language = persisted_user_language
       OmnyaConnector::Current.user_guid = persisted_user_guid
       OmnyaConnector::Current.tenant_id = persisted_tenant_id
+      OmnyaConnector::Current.user_time_zone = persisted_user_time_zone
+      OmnyaConnector::Current.user_language = persisted_user_language
 
       log_host_context_state(
         event: "host_context.persisted",
         details: {
           persisted_user_guid: session[:host_context_user_guid],
-          persisted_tenant_id: session[:host_context_tenant_id]
+          persisted_tenant_id: session[:host_context_tenant_id],
+          persisted_user_time_zone: session[:host_context_user_time_zone],
+          persisted_user_language: session[:host_context_user_language]
         }
       )
     end
@@ -193,6 +257,8 @@ module OmnyaConnector
 
       raw_user_guid = session[:host_context_user_guid]
       raw_tenant_id = session[:host_context_tenant_id]
+      raw_user_time_zone = session[:host_context_user_time_zone]
+      raw_user_language = session[:host_context_user_language]
 
       Rails.logger.info(
         {
@@ -206,10 +272,16 @@ module OmnyaConnector
           session_keys: session.to_hash.keys.sort,
           raw_host_context_user_guid: raw_user_guid,
           raw_host_context_tenant_id: raw_tenant_id,
+          raw_host_context_user_time_zone: raw_user_time_zone,
+          raw_host_context_user_language: raw_user_language,
           normalized_host_context_user_guid: normalized_host_context_guid(raw_user_guid),
           normalized_host_context_tenant_id: normalized_host_context_id(raw_tenant_id),
+          normalized_host_context_user_time_zone: normalized_host_context_locale_value(raw_user_time_zone),
+          normalized_host_context_user_language: normalized_host_context_locale_value(raw_user_language),
           autonomous_user_guid: omnya_connector_autonomous_user_guid,
-          autonomous_tenant_id: omnya_connector_autonomous_tenant_id
+          autonomous_tenant_id: omnya_connector_autonomous_tenant_id,
+          autonomous_user_time_zone: omnya_connector_autonomous_user_time_zone,
+          autonomous_user_language: omnya_connector_autonomous_user_language
         }.merge(details)
       )
     end

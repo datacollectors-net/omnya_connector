@@ -58,6 +58,8 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
 
     assert_equal "dev-user-guid-1", config[:autonomous_user_guid]
     assert_equal 1, config[:autonomous_tenant_id]
+    assert_equal "UTC", config[:autonomous_user_time_zone]
+    assert_equal "en", config[:autonomous_user_language]
   end
 
   test "autonomous values are nil in production" do
@@ -67,6 +69,36 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
 
     assert_nil config[:autonomous_user_guid]
     assert_nil config[:autonomous_tenant_id]
+    assert_nil config[:autonomous_user_time_zone]
+    assert_nil config[:autonomous_user_language]
+  end
+
+  test "autonomous locale values resolve from DSL" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    OmnyaConnector.configure do |c|
+      c.autonomous_user_time_zone = "Europe/Amsterdam"
+      c.autonomous_user_language = "nl"
+    end
+
+    config = OmnyaConnector.configuration.build(env)
+
+    assert_equal "Europe/Amsterdam", config[:autonomous_user_time_zone]
+    assert_equal "nl", config[:autonomous_user_language]
+  end
+
+  test "autonomous locale values resolve from ENV" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    config = with_env(
+      "AUTONOMOUS_USER_TIME_ZONE" => "America/New_York",
+      "AUTONOMOUS_USER_LANGUAGE" => "en-US"
+    ) do
+      OmnyaConnector.configuration.build(env)
+    end
+
+    assert_equal "America/New_York", config[:autonomous_user_time_zone]
+    assert_equal "en-US", config[:autonomous_user_language]
   end
 
   test "DSL values override ENV fallback" do
