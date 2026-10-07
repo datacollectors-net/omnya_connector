@@ -246,6 +246,22 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     assert_equal false, config[:session_cookie_secure]
   end
 
+  test "session_cookie_secure defaults to false in the test environment" do
+    config = with_env("SESSION_COOKIE_SECURE" => nil) do
+      OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("test"))
+    end
+
+    assert_equal false, config[:session_cookie_secure]
+  end
+
+  test "session_cookie_secure defaults to true outside the test environment" do
+    config = with_env("SESSION_COOKIE_SECURE" => nil) do
+      OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("development"))
+    end
+
+    assert_equal true, config[:session_cookie_secure]
+  end
+
   test "configure_session_store defaults to true" do
     config = OmnyaConnector.configuration.build(ActiveSupport::StringInquirer.new("test"))
 

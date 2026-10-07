@@ -49,7 +49,7 @@ module OmnyaConnector
       resolved_autonomous_tid   = @autonomous_tenant_id || ENV["AUTONOMOUS_TENANT_ID"]
       resolved_autonomous_tz    = @autonomous_user_time_zone || ENV["AUTONOMOUS_USER_TIME_ZONE"]
       resolved_autonomous_lang  = @autonomous_user_language || ENV["AUTONOMOUS_USER_LANGUAGE"]
-      resolved_session_cookie_secure = ENV.fetch("SESSION_COOKIE_SECURE", "true") == "true"
+      resolved_session_cookie_secure = ENV.fetch("SESSION_COOKIE_SECURE", env.test? ? "false" : "true") == "true"
       resolved_csrf_bypass      = if @allow_trusted_origin_csrf_bypass.nil?
                                     ENV.fetch("ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS", env.development? ? "true" : "false") == "true"
       else
