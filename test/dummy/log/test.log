@@ -3132,3 +3132,1027 @@ Generating image variants require the image_processing gem. Please add `gem "ima
 Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
 Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
 Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+-------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_valid_session_returns_session-backed_host_context
+-------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_standalone_request_still_uses_autonomous_fallback_in_development-style_mode
+-----------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_request_with_missing_session_returns_unauthorized_and_does_not_use_autonomous_fallback
+-------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextRequirementsTest: test_embedded_tenant_switch_re-sync_immediately_uses_new_tenant_context
+--------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_autonomous_locale_values_resolve_from_ENV
+---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_autonomous_values_are_nil_in_production
+-------------------------------------------------------------------------------
+----------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_parses_comma_separated_origins
+--------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_configure_session_store_defaults_to_true
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_allows_insecure_session_cookie_override_in_production_when_session_store_is_managed_by_host_app
+---------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_log_host_context_state_can_be_enabled_via_DSL
+-------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_malformed_wildcard_origins_in_production
+----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_allows_approved_wildcard_origins_in_production
+--------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_autonomous_locale_values_resolve_from_DSL
+---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_session_cookie_secure_defaults_to_true_outside_the_test_environment
+-----------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_log_host_context_state_defaults_to_false
+--------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_http_origins_in_production
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_secure_session_cookie_in_production_when_session_store_is_configured
+---------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_sets_autonomous_defaults_in_development
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_session_cookie_secure_defaults_to_false_in_the_test_environment
+-------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_development_default_origins_in_development
+---------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_allow_trusted_origin_csrf_bypass_defaults_based_on_environment
+------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_rejects_non-approved_wildcard_origins_in_production
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_module_key_in_production
+-------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_requires_host_origins_to_be_explicitly_set_in_production
+------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_adds_test_fallback_origin_when_none_configured
+--------------------------------------------------------------------------------------
+------------------------------------------------------------------------
+OmnyaConnector::ConfigurationTest: test_DSL_values_override_ENV_fallback
+------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_from_trusted_Origin_succeeds_without_CSRF_token
+----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_wildcard-trusted_origin_succeeds_without_CSRF_token
+---------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_POST_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+--------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_Origin_null_but_trusted_Referer_succeeds_without_CSRF_token
+-----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_or_Referer_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_Referer_and_no_Origin_is_rejected_with_422
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_and_module-origin_Origin_succeeds
+----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_trusted_X-Omnya-Embedded-Host-Origin_is_rejected_when_bypass_flag_is_disabled
+-----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_untrusted_Origin_is_rejected_with_422
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_is_rejected_when_bypass_flag_is_disabled
+-------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started POST "/widgets" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started POST "/widgets" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by WidgetsController#create as HTML
+Processing by HostContextProbesController#show as JSON
+Completed 204 No Content in 2ms (GC: 0.0ms)
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:80:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/test_helper.rb:23:in 'EmbeddedCsrfTestHelper#with_embedded_csrf_enforcement'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:79:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Processing by WidgetsController#create as HTML
+HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)
+Processing by WidgetsController#destroy as HTML
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Processing by WidgetsController#destroy as HTML
+-------------------------------------------------------------------------------------------------------
+Processing by WidgetsController#destroy as HTML
+Processing by HostContextProbesController#show as JSON
+Processing by WidgetsController#destroy as HTML
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+OmnyaConnector::EmbeddedWriteRequestsTest: test_embedded_requests_do_not_use_autonomous_fallback_values
+  Parameters: {"id" => "1"}
+  Parameters: {"module_context" => {"token" => "token-embedded", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+  Parameters: {"id" => "1"}
+Processing by WidgetsController#destroy as HTML
+Can't verify CSRF token authenticity.
+-------------------------------------------------------------------------------------------------------
+  Parameters: {"id" => "1"}
+Completed 422 Unprocessable Content in 3ms (GC: 0.0ms)
+  Parameters: {"id" => "1"}
+  Parameters: {"id" => "1"}
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-embedded-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Can't verify CSRF token authenticity.
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+Filter chain halted as :require_host_context! rendered or redirected
+Completed 401 Unauthorized in 6ms (Views: 0.1ms | GC: 0.0ms)
+HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)
+Completed 204 No Content in 2ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:89:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/test_helper.rb:23:in 'EmbeddedCsrfTestHelper#with_embedded_csrf_enforcement'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:88:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Completed 422 Unprocessable Content in 1ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:184:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://host.example.test) didn't match request.base_url (http://www.example.com)):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:113:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Completed 204 No Content in 1ms (GC: 0.0ms)
+Completed 204 No Content in 2ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://evil.example.com) didn't match request.base_url (http://www.example.com)):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:71:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/test_helper.rb:23:in 'EmbeddedCsrfTestHelper#with_embedded_csrf_enforcement'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:70:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 204 No Content in 2ms (GC: 0.0ms)
+Completed 204 No Content in 2ms (GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_trusted_Origin_succeeds_without_CSRF_token
+------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_untrusted_X-Omnya-Embedded-Host-Origin_is_rejected_with_422
+-----------------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+--------------------------------------------------------------------------------------------------------------
+Completed 204 No Content in 3ms (GC: 0.0ms)
+OmnyaConnector::EmbeddedWriteRequestsTest: test_non-embedded_requests_can_still_use_autonomous_fallback_values
+--------------------------------------------------------------------------------------------------------------
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Completed 204 No Content in 0ms (GC: 0.0ms)
+--------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_from_lookalike_origin_is_rejected_when_wildcard_trusted_origin_configured
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Completed 200 OK in 5ms (Views: 0.1ms | GC: 0.0ms)
+Processing by HostContextProbesController#show as JSON
+OmnyaConnector::EmbeddedWriteRequestsTest: test_DELETE_with_no_Origin_but_trusted_Referer_succeeds_without_CSRF_token
+Processing by WidgetsController#destroy as HTML
+OmnyaConnector::ModuleContextsControllerTest: test_re-sync_with_new_tenant_immediately_replaces_stored_tenant_context
+-----------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+  Parameters: {"id" => "1"}
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_context_with_missing_user_guid
+-----------------------------------------------------------------------------------------
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+Completed 204 No Content in 1ms (GC: 0.0ms)
+  Parameters: {"module_context" => {"token" => "token-embedded-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Processing by WidgetsController#destroy as HTML
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+  Parameters: {"id" => "1"}
+Can't verify CSRF token authenticity.
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 0.1ms | GC: 0.0ms)
+Started DELETE "/widgets/1" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Completed 204 No Content in 1ms (GC: 0.0ms)
+  
+ActionController::InvalidAuthenticityToken (Can't verify CSRF token authenticity.):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:169:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/test_helper.rb:23:in 'EmbeddedCsrfTestHelper#with_embedded_csrf_enforcement'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:168:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Processing by WidgetsController#destroy as HTML
+  Parameters: {"id" => "1"}
+HTTP Origin header (https://tenant-a.omnya-app.com.evil.example) didn't match request.base_url (http://www.example.com)
+Completed 422 Unprocessable Content in 0ms (GC: 0.0ms)
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+----------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_re-sync_with_locale-only_changes_reports_changed_header
+----------------------------------------------------------------------------------------------------------
+  
+ActionController::InvalidAuthenticityToken (HTTP Origin header (https://tenant-a.omnya-app.com.evil.example) didn't match request.base_url (http://www.example.com)):
+  
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:321:in 'ActionController::RequestForgeryProtection::ProtectionMethods::Exception#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:415:in 'ActionController::RequestForgeryProtection#handle_unverified_request'
+actionpack (8.1.3) lib/action_controller/metal/request_forgery_protection.rb:404:in 'ActionController::RequestForgeryProtection#verify_authenticity_token'
+activesupport (8.1.3) lib/active_support/callbacks.rb:362:in 'block in ActiveSupport::Callbacks::CallTemplate::MethodCall#make_lambda'
+activesupport (8.1.3) lib/active_support/callbacks.rb:179:in 'block in ActiveSupport::Callbacks::Filters::Before#call'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:36:in 'block (2 levels) in <module:Callbacks>'
+activesupport (8.1.3) lib/active_support/callbacks.rb:180:in 'ActiveSupport::Callbacks::Filters::Before#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'block in ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'Array#each'
+activesupport (8.1.3) lib/active_support/callbacks.rb:560:in 'ActiveSupport::Callbacks::CallbackSequence#invoke_before'
+activesupport (8.1.3) lib/active_support/callbacks.rb:109:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/abstract_controller/callbacks.rb:266:in 'AbstractController::Callbacks#process_action'
+actionpack (8.1.3) lib/action_controller/metal/rescue.rb:36:in 'ActionController::Rescue#process_action'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:76:in 'block in ActionController::Instrumentation#process_action'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'block in ActiveSupport::Notifications.instrument'
+activesupport (8.1.3) lib/active_support/notifications/instrumenter.rb:58:in 'ActiveSupport::Notifications::Instrumenter#instrument'
+activesupport (8.1.3) lib/active_support/notifications.rb:210:in 'ActiveSupport::Notifications.instrument'
+actionpack (8.1.3) lib/action_controller/metal/instrumentation.rb:75:in 'ActionController::Instrumentation#process_action'
+actionpack (8.1.3) lib/action_controller/metal/params_wrapper.rb:259:in 'ActionController::ParamsWrapper#process_action'
+actionpack (8.1.3) lib/abstract_controller/base.rb:154:in 'AbstractController::Base#process'
+actionview (8.1.3) lib/action_view/rendering.rb:40:in 'ActionView::Rendering#process'
+actionpack (8.1.3) lib/action_controller/metal.rb:252:in 'ActionController::Metal#dispatch'
+actionpack (8.1.3) lib/action_controller/metal.rb:335:in 'ActionController::Metal.dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:65:in 'ActionDispatch::Routing::RouteSet::Dispatcher#dispatch'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:50:in 'ActionDispatch::Routing::RouteSet::Dispatcher#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:35:in 'block in ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:86:in 'block in ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'Array#each'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:66:in 'ActionDispatch::Journey::Router#recognize'
+actionpack (8.1.3) lib/action_dispatch/journey/router.rb:31:in 'ActionDispatch::Journey::Router#serve'
+actionpack (8.1.3) lib/action_dispatch/routing/route_set.rb:906:in 'ActionDispatch::Routing::RouteSet#call'
+railties (8.1.3) lib/rails/engine/lazy_route_set.rb:60:in 'Rails::Engine::LazyRouteSet#call'
+rack (3.2.6) lib/rack/tempfile_reaper.rb:20:in 'Rack::TempfileReaper#call'
+rack (3.2.6) lib/rack/etag.rb:29:in 'Rack::ETag#call'
+rack (3.2.6) lib/rack/conditional_get.rb:44:in 'Rack::ConditionalGet#call'
+rack (3.2.6) lib/rack/head.rb:15:in 'Rack::Head#call'
+actionpack (8.1.3) lib/action_dispatch/http/content_security_policy.rb:38:in 'ActionDispatch::ContentSecurityPolicy::Middleware#call'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:274:in 'Rack::Session::Abstract::Persisted#context'
+rack-session (2.1.2) lib/rack/session/abstract/id.rb:268:in 'Rack::Session::Abstract::Persisted#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/cookies.rb:708:in 'ActionDispatch::Cookies#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:31:in 'block in ActionDispatch::Callbacks#call'
+activesupport (8.1.3) lib/active_support/callbacks.rb:101:in 'ActiveSupport::Callbacks#run_callbacks'
+actionpack (8.1.3) lib/action_dispatch/middleware/callbacks.rb:30:in 'ActionDispatch::Callbacks#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in 'ActionDispatch::ActionableExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/debug_exceptions.rb:31:in 'ActionDispatch::DebugExceptions#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/show_exceptions.rb:32:in 'ActionDispatch::ShowExceptions#call'
+railties (8.1.3) lib/rails/rack/logger.rb:41:in 'Rails::Rack::Logger#call_app'
+railties (8.1.3) lib/rails/rack/logger.rb:29:in 'Rails::Rack::Logger#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/remote_ip.rb:98:in 'ActionDispatch::RemoteIp#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/request_id.rb:34:in 'ActionDispatch::RequestId#call'
+rack (3.2.6) lib/rack/method_override.rb:28:in 'Rack::MethodOverride#call'
+rack (3.2.6) lib/rack/runtime.rb:24:in 'Rack::Runtime#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/executor.rb:20:in 'ActionDispatch::Executor#call'
+actionpack (8.1.3) lib/action_dispatch/middleware/static.rb:27:in 'ActionDispatch::Static#call'
+rack (3.2.6) lib/rack/sendfile.rb:131:in 'Rack::Sendfile#call'
+railties (8.1.3) lib/rails/engine.rb:534:in 'Rails::Engine#call'
+rack-test (2.2.0) lib/rack/test.rb:360:in 'Rack::Test::Session#process_request'
+rack-test (2.2.0) lib/rack/test.rb:153:in 'Rack::Test::Session#request'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:298:in 'ActionDispatch::Integration::Session#process'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:43:in 'ActionDispatch::Integration::RequestHelpers#delete'
+actionpack (8.1.3) lib/action_dispatch/testing/integration.rb:389:in 'ActionDispatch::Integration::Runner#delete'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:151:in 'block (3 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/test_helper.rb:23:in 'EmbeddedCsrfTestHelper#with_embedded_csrf_enforcement'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:150:in 'block (2 levels) in <class:EmbeddedWriteRequestsTest>'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:226:in 'OmnyaConnector::EmbeddedWriteRequestsTest#with_host_app_origins'
+/Users/jtromp/Documents/local_ontwikkeling/omnya_connector/test/controllers/omnya_connector/embedded_write_requests_test.rb:149:in 'block in <class:EmbeddedWriteRequestsTest>'
+minitest (6.0.6) lib/minitest/test.rb:91:in 'block (2 levels) in Minitest::Test#run'
+minitest (6.0.6) lib/minitest/test.rb:187:in 'Minitest::Test#capture_exceptions'
+minitest (6.0.6) lib/minitest/test.rb:86:in 'block in Minitest::Test#run'
+minitest (6.0.6) lib/minitest.rb:397:in 'Minitest::Runnable#time_it'
+minitest (6.0.6) lib/minitest/test.rb:85:in 'Minitest::Test#run'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'block in ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/execution_wrapper.rb:104:in 'ActiveSupport::ExecutionWrapper.perform'
+activesupport (8.1.3) lib/active_support/executor/test_helper.rb:5:in 'ActiveSupport::Executor::TestHelper#run'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:53:in 'block in ActiveSupport::Testing::Parallelization::Worker#perform_job'
+minitest (6.0.6) lib/minitest.rb:511:in 'Minitest::Runnable.on_signal'
+minitest (6.0.6) lib/minitest.rb:498:in 'Minitest::Runnable.with_info_handler'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:49:in 'ActiveSupport::Testing::Parallelization::Worker#perform_job'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:38:in 'ActiveSupport::Testing::Parallelization::Worker#work_from_queue'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:27:in 'block in ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'Kernel#fork'
+activesupport (8.1.3) lib/active_support/testing/parallelization/worker.rb:15:in 'ActiveSupport::Testing::Parallelization::Worker#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:50:in 'block in ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Integer#times'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerator#each'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'Enumerable#map'
+activesupport (8.1.3) lib/active_support/testing/parallelization.rb:49:in 'ActiveSupport::Testing::Parallelization#start'
+activesupport (8.1.3) lib/active_support/testing/parallelize_executor.rb:19:in 'ActiveSupport::Testing::ParallelizeExecutor#start'
+minitest (6.0.6) lib/minitest.rb:313:in 'Minitest.run'
+minitest (6.0.6) lib/minitest.rb:84:in 'block in Minitest.autorun'
+Processing by HostContextProbesController#show as JSON
+Completed 200 OK in 1ms (Views: 0.1ms | GC: 0.0ms)
+-----------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_rejects_invalid_module_key
+-----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_POST_/module_context_succeeds_without_CSRF_token_when_Origin_is_module_base_URL
+----------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unauthorized_for_fetch_errors_with_unauthorized_message
+------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+-------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_creates_context_from_valid_payload
+-------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-expired", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by HostContextProbesController#show as JSON
+Completed 200 OK in 0ms (Views: 0.0ms | GC: 0.0ms)
+Completed 401 Unauthorized in 1ms (Views: 0.1ms | GC: 0.0ms)
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => "wrong-key"}}
+------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_destroy_clears_host_context
+------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-2", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 401 Unauthorized in 2ms (Views: 0.2ms | GC: 0.0ms)
+------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_returns_unprocessable_entity_for_other_fetch_errors
+------------------------------------------------------------------------------------------------------
+Started DELETE "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#destroy as HTML
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 422 Unprocessable Content in 0ms (Views: 0.0ms | GC: 0.0ms)
+-------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_POST_/module_context_succeeds_without_CSRF_token_and_no_origin_signals
+-------------------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+----------------------------------------------------------------------------------------------------------
+OmnyaConnector::ModuleContextsControllerTest: test_re-sync_with_unchanged_context_reports_unchanged_header
+----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------
+OmnyaConnector::EngineTest: test_requires_force_ssl_in_production
+-----------------------------------------------------------------
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-switch-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-1", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-same-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 401 Unauthorized in 1ms (Views: 0.1ms | GC: 0.0ms)
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+------------------------------------------------------------------------------------------------------------------------
+OmnyaConnector::EngineTest: test_content_security_policy_ensures_frame-ancestors_includes_self_even_without_host_origins
+------------------------------------------------------------------------------------------------------------------------
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-switch-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-same-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 204 No Content in 1ms (GC: 0.0ms)
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+---------------------------------------------------------------------------
+OmnyaConnector::EngineTest: test_skips_HTTPS_enforcement_outside_production
+---------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+OmnyaConnector::EngineTest: test_content_security_policy_merge_is_a_no-op_when_policy_is_nil
+--------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+OmnyaConnector::EngineTest: test_content_security_policy_merges_connect-src_and_frame-ancestors_additively
+----------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+Started GET "/host_context_probe" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+-----------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_token_is_blank
+-----------------------------------------------------------------------------
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+OmnyaConnector::EngineTest: test_allows_boot_when_force_ssl_is_enabled_in_production
+  Parameters: {"module_context" => {"token" => "token-locale-a", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+------------------------------------------------------------------------------------
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by HostContextProbesController#show as JSON
+-------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_for_invalid_URI
+-------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+Completed 200 OK in 1ms (Views: 0.1ms | GC: 0.0ms)
+OmnyaConnector::HostContextFetcherTest: test_rejects_lookalike_context_endpoint_when_wildcard_origin_configured
+---------------------------------------------------------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "token-locale-b", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+  Parameters: {"module_context" => {"token" => "t", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+-----------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_endpoint_origin_is_not_in_allowed_list
+-----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_raises_error_when_context_endpoint_is_blank
+----------------------------------------------------------------------------------------
+Completed 204 No Content in 0ms (GC: 0.0ms)
+Completed 204 No Content in 1ms (GC: 0.0ms)
+---------------------------------------------------------------------------------------------------
+OmnyaConnector::HostContextFetcherTest: test_accepts_context_endpoint_on_trusted_wildcard_subdomain
+---------------------------------------------------------------------------------------------------
+------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_blank_origin
+------------------------------------------------------------
+--------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_invalid_origin
+--------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_matches_wildcard_when_explicit_wildcard_port_matches
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_wildcard_apex_domain
+--------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_matches_exact_origin_after_default-port_normalization
+---------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_wildcard_lookalike_suffix
+-------------------------------------------------------------------------
+-----------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_matches_wildcard_deep_subdomain
+-----------------------------------------------------------------------
+------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_matches_wildcard_subdomain
+------------------------------------------------------------------
+------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_matches_exact_origin
+--------------------------------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_wildcard_when_explicit_wildcard_port_differs
+--------------------------------------------------------------------------------------------
+------------------------------------------------------------
+Started POST "/module_context" for 127.0.0.1 at 2026-10-07 12:21:42 +0200
+------------------------------------------------------------------------------------------
+OmnyaConnector::OriginMatcherTest: test_rejects_exact_origin_when_non-default_port_differs
+------------------------------------------------------------------------------------------
+Processing by OmnyaConnector::ModuleContextsController#create as HTML
+  Parameters: {"module_context" => {"token" => "t", "context_endpoint" => "https://host.example.test/external_modules/context", "module_key" => ""}}
+Completed 204 No Content in 0ms (GC: 0.0ms)

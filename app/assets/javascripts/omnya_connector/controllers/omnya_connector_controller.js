@@ -4,6 +4,46 @@ import { originAllowed as originAllowedByRule } from "controllers/origin_matcher
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000
 const REFRESH_WAIT_TIMEOUT_MS = 5000
 const CONTEXT_SYNC_FINGERPRINT_KEY = "omnya_connector_context_sync_fingerprint"
+const EMBEDDED_HOST_ORIGIN_HEADER = "X-Omnya-Embedded-Host-Origin"
+
+// Trusted host origin shared with the XMLHttpRequest patch below. Only ever set to a
+// value a connected controller has validated against its hostOriginsValue allowlist, so
+// untrusted or unknown origins never reach request headers.
+let currentTrustedHostOrigin = null
+
+// Patches XMLHttpRequest so same-origin requests carry X-Omnya-Embedded-Host-Origin the
+// way Turbo fetches do via turbo:before-fetch-request. Libraries that bypass Turbo (for
+// example ActiveStorage DirectUploads) would otherwise send embedded write requests
+// without the header, and the server cannot verify them against the host origin allowlist.
+function installEmbeddedHostOriginXhrPatch() {
+  if (XMLHttpRequest.__omnyaEmbeddedPatched) return
+  XMLHttpRequest.__omnyaEmbeddedPatched = true
+
+  const originalOpen = XMLHttpRequest.prototype.open
+  XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+    let sameOriginRequest = false
+    try {
+      sameOriginRequest = new URL(url, window.location.origin).origin === window.location.origin
+    } catch (_error) {
+      // Invalid URLs are rejected by the native open; nothing to inject for them.
+    }
+    this.__omnyaSameOriginRequest = sameOriginRequest
+    return originalOpen.call(this, method, url, ...rest)
+  }
+
+  const originalSend = XMLHttpRequest.prototype.send
+  XMLHttpRequest.prototype.send = function (body) {
+    if (this.__omnyaSameOriginRequest && currentTrustedHostOrigin && !this.__omnyaEmbeddedHeaderInjected) {
+      this.setRequestHeader(EMBEDDED_HOST_ORIGIN_HEADER, currentTrustedHostOrigin)
+      this.__omnyaEmbeddedHeaderInjected = true
+    }
+    return originalSend.call(this, body)
+  }
+}
+
+function setEmbeddedHostOrigin(origin) {
+  currentTrustedHostOrigin = origin || null
+}
 
 // If the engine is mounted at a prefix (e.g. mount OmnyaConnector::Engine => "/my_prefix"),
 // adjust this path accordingly (e.g. "/my_prefix/module_context").
@@ -45,6 +85,9 @@ export default class extends Controller {
     this.boundHashChange = this.handleHashChange.bind(this)
     this.boundBeforeFetchRequest = this.handleBeforeFetchRequest.bind(this)
 
+    installEmbeddedHostOriginXhrPatch()
+    this.publishActiveHostOrigin()
+
     window.addEventListener("message", this.boundMessageHandler)
     document.addEventListener("turbo:load", this.boundTurboLoad)
     document.addEventListener("turbo:before-fetch-request", this.boundBeforeFetchRequest)
@@ -70,6 +113,11 @@ export default class extends Controller {
   }
 
   disconnect() {
+    const publishedOrigin = this.activeHostOrigin && this.originAllowed(this.activeHostOrigin) ? this.activeHostOrigin : null
+    if (publishedOrigin && currentTrustedHostOrigin === publishedOrigin) {
+      setEmbeddedHostOrigin(null)
+    }
+
     window.removeEventListener("message", this.boundMessageHandler)
     document.removeEventListener("turbo:load", this.boundTurboLoad)
     document.removeEventListener("turbo:before-fetch-request", this.boundBeforeFetchRequest)
@@ -117,6 +165,7 @@ export default class extends Controller {
     }
 
     this.activeHostOrigin = event.origin
+    this.publishActiveHostOrigin()
     this.token = payload.token
     this.contextEndpoint = payload.contextEndpoint
 
@@ -208,7 +257,16 @@ export default class extends Controller {
   // own Origin header is non-actionable (e.g. same-origin or absent due to cookie restrictions).
   handleBeforeFetchRequest(event) {
     if (!this.activeHostOrigin || !this.originAllowed(this.activeHostOrigin)) return
-    event.detail.fetchOptions.headers["X-Omnya-Embedded-Host-Origin"] = this.activeHostOrigin
+    event.detail.fetchOptions.headers[EMBEDDED_HOST_ORIGIN_HEADER] = this.activeHostOrigin
+  }
+
+  // Publishes the active host origin to the shared XMLHttpRequest patch state when it is
+  // known and trusted, or clears it otherwise. Mirrors the guard in handleBeforeFetchRequest
+  // so non-Turbo requests (e.g. ActiveStorage DirectUploads) are verified against the same
+  // allowlist as Turbo fetches.
+  publishActiveHostOrigin() {
+    const trustedOrigin = this.activeHostOrigin && this.originAllowed(this.activeHostOrigin) ? this.activeHostOrigin : null
+    setEmbeddedHostOrigin(trustedOrigin)
   }
 
   startRefreshTimer() {
@@ -288,6 +346,7 @@ export default class extends Controller {
     const inferredOrigin = this.initialHostOrigin()
     if (inferredOrigin) {
       this.activeHostOrigin = inferredOrigin
+      this.publishActiveHostOrigin()
       return inferredOrigin
     }
 
@@ -315,7 +374,7 @@ export default class extends Controller {
   async persistContextSession() {
     try {
       const embeddedHostHeaders = (this.activeHostOrigin && this.originAllowed(this.activeHostOrigin))
-        ? { "X-Omnya-Embedded-Host-Origin": this.activeHostOrigin }
+        ? { [EMBEDDED_HOST_ORIGIN_HEADER]: this.activeHostOrigin }
         : {}
 
       const response = await fetch(MODULE_CONTEXT_PATH, {
