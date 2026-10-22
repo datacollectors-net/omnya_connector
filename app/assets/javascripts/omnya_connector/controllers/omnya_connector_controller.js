@@ -256,6 +256,7 @@ export default class extends Controller {
   // CSRF verification for embedded write actions (DELETE/POST/PATCH) when the module's
   // own Origin header is non-actionable (e.g. same-origin or absent due to cookie restrictions).
   handleBeforeFetchRequest(event) {
+    if (!this.embeddedInIframe()) return
     if (!this.activeHostOrigin || !this.originAllowed(this.activeHostOrigin)) return
     event.detail.fetchOptions.headers[EMBEDDED_HOST_ORIGIN_HEADER] = this.activeHostOrigin
   }
@@ -263,8 +264,15 @@ export default class extends Controller {
   // Publishes the active host origin to the shared XMLHttpRequest patch state when it is
   // known and trusted, or clears it otherwise. Mirrors the guard in handleBeforeFetchRequest
   // so non-Turbo requests (e.g. ActiveStorage DirectUploads) are verified against the same
-  // allowlist as Turbo fetches.
+  // allowlist as Turbo fetches. Outside an iframe there is no embedding host to verify
+  // against: publishing a referrer-inferred origin here would make the server treat
+  // standalone requests as embedded and drop their autonomous context.
   publishActiveHostOrigin() {
+    if (!this.embeddedInIframe()) {
+      setEmbeddedHostOrigin(null)
+      return
+    }
+
     const trustedOrigin = this.activeHostOrigin && this.originAllowed(this.activeHostOrigin) ? this.activeHostOrigin : null
     setEmbeddedHostOrigin(trustedOrigin)
   }

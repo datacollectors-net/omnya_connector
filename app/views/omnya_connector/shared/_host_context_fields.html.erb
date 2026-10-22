@@ -1,0 +1,3 @@
+<%# Hidden host-context fields for embedded form submissions; tenant-refresh updates them after handshake when needed. %>
+<%= hidden_field_tag :context_tenant_id, host_context_params[:context_tenant_id] %>
+<%= hidden_field_tag :context_user_guid, host_context_params[:context_user_guid] %>

@@ -17,6 +17,7 @@ module OmnyaConnector
       app.config.x.omnya_connector.session_cookie_secure            = resolved[:session_cookie_secure]
       app.config.x.omnya_connector.allow_trusted_origin_csrf_bypass = resolved[:allow_trusted_origin_csrf_bypass]
       app.config.x.omnya_connector.configure_session_store          = resolved[:configure_session_store]
+      app.config.x.omnya_connector.enforce_iframe_navigation        = resolved[:enforce_iframe_navigation]
       app.config.x.omnya_connector.log_host_context_state           = resolved[:log_host_context_state]
     end
 
@@ -37,6 +38,11 @@ module OmnyaConnector
       httponly: true,
       secure: secure_cookie
     )
+
+    # CHIPS (Cookies Having Independent Partitioned State): add the `Partitioned`
+    # attribute to the SameSite=None session cookie so it survives third-party
+    # cookie blocking in modern browsers when embedded cross-origin.
+    app.config.middleware.insert_before ActionDispatch::Cookies, OmnyaConnector::PartitionedCookieMiddleware
   end
 
     # Append host app origins to the Content-Security-Policy connect-src directive

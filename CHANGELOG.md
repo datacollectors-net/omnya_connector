@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `OmnyaConnector::PartitionedCookieMiddleware` (CHIPS): the engine inserts it before `ActionDispatch::Cookies` when `configure_session_store` is enabled, adding the `Partitioned` attribute to the `SameSite=None` session cookie so it survives third-party cookie blocking in cross-origin iframes. Apps managing their own session store can insert it manually
+- Param-based host context fallback: embedded forms can carry hidden `context_user_guid` / `context_tenant_id` fields (via the new `host_context_params` helper or the bundled `omnya_connector/shared/_host_context_fields` partial) to re-establish the host context when third-party cookie restrictions keep the session from round-tripping. Restricted to trusted embedded requests
+- Development-only fallback in `require_host_context!`: embedded requests without session context fall back to autonomous dev defaults instead of redirect-looping (`ERR_TOO_MANY_REDIRECTS`) when the handshake cookie does not round-trip in the host iframe
+- `enforce_iframe_navigation` option (DSL / `ENFORCE_IFRAME_NAVIGATION`, default `false`): blocks direct top-level HTML access unless the request comes from an iframe (`Sec-Fetch-Dest: iframe`) or a trusted embedded origin
+
 ### Changed
+
+- Stimulus controller no longer publishes or injects `X-Omnya-Embedded-Host-Origin` outside an iframe, so standalone requests with a trusted referrer are not misclassified as embedded on the server
 
 - Gem packaging metadata updated for private GitHub Packages publishing (`allowed_push_host`, documentation URI, bug tracker URI)
 - README installation updated to use the GitHub Packages source block

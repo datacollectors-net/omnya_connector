@@ -2,7 +2,14 @@ module OmnyaConnector
   module ControllerConcern
     extend ActiveSupport::Concern
 
+    IFRAME_FETCH_DEST_HEADER = "Sec-Fetch-Dest".freeze
+    IFRAME_FETCH_DEST_VALUE = "iframe".freeze
+
     included do
+      before_action :enforce_iframe_navigation
+      # Must run before assign_current_host_context so the assignment reads the
+      # freshly persisted values when a param-based fallback applies.
+      before_action :persist_host_context_from_params
       before_action :assign_current_host_context
       skip_forgery_protection if: :trusted_embedded_origin_request?
 
@@ -15,7 +22,18 @@ module OmnyaConnector
                     :current_host_user_guid,
                     :current_host_tenant_id,
                     :current_host_user_time_zone,
-                    :current_host_user_language
+                    :current_host_user_language,
+                    :host_context_params
+    end
+
+    # Host context as request params for embedded form submissions: when third-party cookie
+    # restrictions keep the session from round-tripping in the host iframe, these hidden
+    # fields let persist_host_context_from_params re-establish the context on submit.
+    def host_context_params
+      {
+        context_tenant_id: current_host_tenant_id.presence,
+        context_user_guid: current_host_user_guid.presence
+      }.compact
     end
 
     private
@@ -102,6 +120,22 @@ module OmnyaConnector
         session_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
         session_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
         return if session_user_guid.present? && session_tenant_id.present?
+
+        # Development only: where the handshake cookie does not round-trip in the host iframe,
+        # Turbo redirect-follows arrive with an empty session and a self-referencing Referer,
+        # so redirecting loops forever (ERR_TOO_MANY_REDIRECTS). Fall back to the autonomous
+        # dev defaults — the same values non-embedded requests already resolve to — so guarded
+        # pages stay reachable. Production keeps the original guard behavior.
+        if Rails.env.development?
+          persist_host_context(
+            omnya_connector_autonomous_user_guid || autonomous_default_guid,
+            omnya_connector_autonomous_tenant_id || autonomous_default_id
+          )
+
+          session_user_guid = normalized_host_context_guid(session[:host_context_user_guid])
+          session_tenant_id = normalized_host_context_id(session[:host_context_tenant_id])
+          return if session_user_guid.present? && session_tenant_id.present?
+        end
       else
         return if current_host_user_guid.present? && current_host_tenant_id.present?
       end
@@ -110,6 +144,41 @@ module OmnyaConnector
         format.html { redirect_back fallback_location: root_path, alert: "Host context not available." }
         format.json { render json: { error: "host_context_missing" }, status: :unauthorized }
       end
+    end
+
+    # Persist host context from trusted request params before guards run when session cookies are unavailable.
+    def persist_host_context_from_params
+      return unless trusted_embedded_context_param_request?
+
+      user_guid = normalized_host_context_guid(params[:context_user_guid])
+      tenant_id = normalized_host_context_id(params[:context_tenant_id])
+      return if user_guid.blank? || tenant_id.blank?
+
+      persist_host_context(user_guid, tenant_id)
+    end
+
+    # Restrict param-based context fallback to embedded trusted-origin requests only.
+    def trusted_embedded_context_param_request?
+      params[:context_user_guid].present? && params[:context_tenant_id].present? && embedded_request?
+    end
+
+    # Block direct top-level HTML access when enabled, requiring iframe navigation.
+    def enforce_iframe_navigation
+      return unless omnya_connector_enforce_iframe_navigation?
+      return unless request.get? && request.format.html?
+      return if iframe_navigation_request?
+
+      render plain: "This application can only be opened from the host application iframe.", status: :forbidden
+    end
+
+    def iframe_navigation_request?
+      return true if request.headers[IFRAME_FETCH_DEST_HEADER].to_s.casecmp?(IFRAME_FETCH_DEST_VALUE)
+
+      embedded_request?
+    end
+
+    def omnya_connector_enforce_iframe_navigation?
+      Rails.application.config.x.omnya_connector.enforce_iframe_navigation
     end
 
     def trusted_embedded_origin_request?

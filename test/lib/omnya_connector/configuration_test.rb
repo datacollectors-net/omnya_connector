@@ -115,6 +115,36 @@ class OmnyaConnector::ConfigurationTest < ActiveSupport::TestCase
     assert_equal [ "https://dsl.example" ], config[:host_app_origins]
   end
 
+  test "enforce_iframe_navigation defaults to false" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    config = OmnyaConnector.configuration.build(env)
+
+    assert_equal false, config[:enforce_iframe_navigation]
+  end
+
+  test "enforce_iframe_navigation resolves from DSL" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    OmnyaConnector.configure do |c|
+      c.enforce_iframe_navigation = true
+    end
+
+    config = OmnyaConnector.configuration.build(env)
+
+    assert_equal true, config[:enforce_iframe_navigation]
+  end
+
+  test "enforce_iframe_navigation resolves from ENV" do
+    env = ActiveSupport::StringInquirer.new("test")
+
+    config = with_env("ENFORCE_IFRAME_NAVIGATION" => "true") do
+      OmnyaConnector.configuration.build(env)
+    end
+
+    assert_equal true, config[:enforce_iframe_navigation]
+  end
+
   test "allows approved wildcard origins in production" do
     env = ActiveSupport::StringInquirer.new("production")
 

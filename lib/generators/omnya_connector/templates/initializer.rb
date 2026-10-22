@@ -3,7 +3,7 @@
 # DSL values take precedence; ENV variables are used as fallback.
 # ENV variables: MODULE_KEY, HOST_APP_ORIGINS, AUTONOMOUS_USER_GUID,
 #                AUTONOMOUS_TENANT_ID, ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS,
-#                SESSION_COOKIE_SECURE
+#                ENFORCE_IFRAME_NAVIGATION, SESSION_COOKIE_SECURE
 # Production requires HTTPS deployment (`config.force_ssl = true`) so secure iframe cookies work.
 
 OmnyaConnector.configure do |config|
@@ -31,7 +31,14 @@ OmnyaConnector.configure do |config|
   # config.allow_trusted_origin_csrf_bypass = false
 
   # Set to false to skip automatic session store configuration (SameSite=None for iframes).
+  # The engine also adds the CHIPS `Partitioned` attribute to the session cookie via
+  # OmnyaConnector::PartitionedCookieMiddleware; when managing the session store yourself,
+  # insert that middleware manually before ActionDispatch::Cookies.
   # config.configure_session_store = true
+
+  # Block direct top-level HTML access unless the request comes from an iframe
+  # (Sec-Fetch-Dest: iframe) or a trusted embedded origin. Defaults to false.
+  # config.enforce_iframe_navigation = true
 
   # Enable verbose host-context request/session debug logging.
   # Defaults to false.

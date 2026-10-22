@@ -7,6 +7,10 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 - **Host context management** — Receives token and context endpoint from the host via `postMessage`, fetches user/tenant context, persists it in the Rails session
 - **Autonomous mode** — Operates standalone in development with configurable `user_guid` and `tenant_id`
 - **CSRF-safe iframe embedding** — `SameSite=None` session cookies; `POST /module_context` unconditionally skips CSRF (protected by module-key + context-endpoint origin validation instead); Turbo/fetch and same-origin XHR write requests from within the module iframe are trusted when the Stimulus controller injects `X-Omnya-Embedded-Host-Origin` with a postMessage-established trusted host origin (guarded by `allow_trusted_origin_csrf_bypass`)
+- **CHIPS support** — The engine inserts `OmnyaConnector::PartitionedCookieMiddleware`, which adds the `Partitioned` attribute to the session cookie so it survives third-party cookie blocking (Chrome 120+, Safari) in cross-origin iframes
+- **Param-based context fallback** — When third-party cookie restrictions keep the session from round-tripping, embedded forms can carry hidden `context_user_guid` / `context_tenant_id` fields (rendered via the `host_context_params` helper or the bundled `_host_context_fields` partial) to re-establish the host context on submit
+- **Development guard fallback** — In development only, `require_host_context!` falls back to autonomous dev defaults for embedded requests without session context instead of redirect-looping (`ERR_TOO_MANY_REDIRECTS`) when the handshake cookie does not round-trip in the host iframe
+- **Optional iframe navigation enforcement** — `enforce_iframe_navigation` blocks direct top-level HTML access unless the request comes from an iframe (`Sec-Fetch-Dest: iframe`) or a trusted embedded origin
 - **Content Security Policy** — Automatically merges host origins into `connect-src` and `frame-ancestors` (additive, non-destructive)
 - **Stimulus controller** — Handles the full postMessage lifecycle: handshake, context fetch, token refresh on 401, periodic refresh, and host theme synchronisation
 - **Browser URL sync** — Reports module route changes to the host (`external-module:navigate`) so bookmarks and browser back/forward work
@@ -49,6 +53,7 @@ OmnyaConnector.configure do |config|
   config.autonomous_tenant_id = "1"                        # ENV: AUTONOMOUS_TENANT_ID
   config.allow_trusted_origin_csrf_bypass = false           # ENV: ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS
   config.configure_session_store = true                     # Set false to manage session store yourself
+  config.enforce_iframe_navigation = false                  # ENV: ENFORCE_IFRAME_NAVIGATION; block direct top-level HTML access
   config.log_host_context_state = false                     # Optional debug logging, default false
 end
 ```
@@ -167,8 +172,22 @@ The `OmnyaConnector::ControllerConcern` provides these methods (also available a
 | `omnya_connector_host_app_origins` | List of allowed host origins |
 | `omnya_connector_autonomous_user_guid` | Autonomous mode user GUID |
 | `omnya_connector_autonomous_tenant_id` | Autonomous mode tenant ID |
-| `require_host_context!` | Before-action guard: redirects/returns 401 if context missing |
+| `require_host_context!` | Before-action guard: redirects/returns 401 if context missing. In development only, embedded requests without session context fall back to autonomous dev defaults instead of redirect-looping when the handshake cookie does not round-trip in the host iframe |
 | `trusted_embedded_origin_request?` | Returns `true` for cross-origin requests whose `Origin` header is a configured trusted host origin, **or** for same-origin/no-origin requests that carry an `X-Omnya-Embedded-Host-Origin` header with a trusted host origin (set by the Stimulus controller after the postMessage handshake). Always `false` when `allow_trusted_origin_csrf_bypass` is disabled. |
+| `host_context_params` | Hash of hidden form fields (`context_user_guid`, `context_tenant_id`) carrying the current host context for embedded form submissions; empty values are omitted |
+
+### Param-based context fallback
+
+When third-party cookie restrictions keep the session from round-tripping in the host iframe, embedded forms can re-establish the host context on submit by rendering hidden context fields:
+
+```erb
+<%= form_with url: tickets_path, method: :post do %>
+  <%= render "omnya_connector/shared/host_context_fields" %>
+  ...
+<% end %>
+```
+
+The engine ships `app/views/omnya_connector/shared/_host_context_fields.html.erb` for this purpose. The fallback is restricted to trusted embedded requests (see `trusted_embedded_origin_request?`) and runs before `assign_current_host_context`, so the persisted values are used for the current request as well.
 
 ### CurrentAttributes
 
@@ -311,6 +330,11 @@ If mounted at a prefix (e.g. `"/omnya_connector"`), update the `MODULE_CONTEXT_P
 The engine automatically configures:
 
 - **Session store** — `cookie_store` with `SameSite=None`, `httponly: true`, `secure: true` (disable with `configure_session_store = false`)
+- **Partitioned session cookie** — Inserts `OmnyaConnector::PartitionedCookieMiddleware` before `ActionDispatch::Cookies`, adding the CHIPS `Partitioned` attribute to the session cookie so it survives third-party cookie blocking in cross-origin iframes. When you manage the session store yourself (`configure_session_store = false`), insert the middleware manually:
+
+  ```ruby
+  config.middleware.insert_before ActionDispatch::Cookies, OmnyaConnector::PartitionedCookieMiddleware
+  ```
 - **CSP** — Appends host origins to `connect-src` directive
 - **Importmap** — Pins the Stimulus controller JS for auto-discovery
 

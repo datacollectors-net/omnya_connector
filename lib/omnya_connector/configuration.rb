@@ -24,6 +24,7 @@ module OmnyaConnector
                   :autonomous_user_language,
                   :allow_trusted_origin_csrf_bypass,
                   :configure_session_store,
+                  :enforce_iframe_navigation,
                   :log_host_context_state
 
     def initialize
@@ -36,6 +37,7 @@ module OmnyaConnector
       @autonomous_user_language = nil
       @allow_trusted_origin_csrf_bypass = nil
       @configure_session_store = true
+      @enforce_iframe_navigation = nil
       @log_host_context_state = false
     end
 
@@ -54,6 +56,11 @@ module OmnyaConnector
                                     ENV.fetch("ALLOW_TRUSTED_ORIGIN_CSRF_BYPASS", env.development? ? "true" : "false") == "true"
       else
                                     @allow_trusted_origin_csrf_bypass
+      end
+      resolved_enforce_iframe   = if @enforce_iframe_navigation.nil?
+                                    ENV.fetch("ENFORCE_IFRAME_NAVIGATION", "false") == "true"
+      else
+                                    @enforce_iframe_navigation
       end
 
       origins = parse_origins(resolved_origins_raw, env)
@@ -77,6 +84,7 @@ module OmnyaConnector
         session_cookie_secure: resolved_session_cookie_secure,
         allow_trusted_origin_csrf_bypass: resolved_csrf_bypass,
         configure_session_store: @configure_session_store,
+        enforce_iframe_navigation: resolved_enforce_iframe,
         log_host_context_state: @log_host_context_state
       }
     end

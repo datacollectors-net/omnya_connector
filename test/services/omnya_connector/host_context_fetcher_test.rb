@@ -1,3 +1,4 @@
+require "net/http"
 require "test_helper"
 
 class OmnyaConnector::HostContextFetcherTest < ActiveSupport::TestCase

@@ -1,6 +1,7 @@
 require "omnya_connector/version"
 require "omnya_connector/configuration"
 require "omnya_connector/origin_matcher"
+require "omnya_connector/middleware/partitioned_cookie_middleware"
 require "omnya_connector/engine"
 
 module OmnyaConnector

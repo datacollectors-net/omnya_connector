@@ -47,6 +47,25 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
     end
   end
 
+  test "embedded request without session falls back to autonomous values in development" do
+    original_rails_env = Rails.env
+    Rails.env = "development"
+
+    with_autonomous_values("autonomous-user", 456) do
+      get host_context_probe_url,
+        headers: {
+          "Origin" => TRUSTED_ORIGIN,
+          "Accept" => "application/json"
+        }
+
+      assert_response :success
+      assert_equal "autonomous-user", response.parsed_body["user_guid"]
+      assert_equal 456, response.parsed_body["tenant_id"]
+    end
+  ensure
+    Rails.env = original_rails_env
+  end
+
   test "standalone request still uses autonomous fallback in development-style mode" do
     with_autonomous_values("autonomous-user", 456, "America/New_York", "en-US") do
       get host_context_probe_url, headers: { "Accept" => "application/json" }
