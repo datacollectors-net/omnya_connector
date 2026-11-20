@@ -259,7 +259,8 @@ The controller automatically reports internal module URL changes to the host app
 
 This enables:
 
-- host address bar updates with `module_path`
+- host address bar updates with canonical module paths such as
+  `/modules/my-module/orders/42?tab=history`
 - bookmarkable deep links
 - browser Back/Forward restoration
 
