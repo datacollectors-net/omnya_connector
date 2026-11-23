@@ -22,11 +22,10 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
         "user" => { "guid" => "embedded-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
         "tenant" => { "id" => 77 }
       }) do
-        post omnya_connector.module_context_url, params: {
+        post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
           module_context: {
             token: "token-embedded",
-            context_endpoint: "https://host.example.test/external_modules/context",
-            module_key: Rails.application.config.x.omnya_connector.module_key
+            context_endpoint: "https://host.example.test/external_modules/context"
           }
         }
       end
@@ -84,11 +83,10 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
         "user" => { "guid" => "embedded-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
         "tenant" => { "id" => 77 }
       }) do
-        post omnya_connector.module_context_url, params: {
+        post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
           module_context: {
             token: "token-embedded-a",
-            context_endpoint: "https://host.example.test/external_modules/context",
-            module_key: Rails.application.config.x.omnya_connector.module_key
+            context_endpoint: "https://host.example.test/external_modules/context"
           }
         }
       end
@@ -99,11 +97,10 @@ class OmnyaConnector::HostContextRequirementsTest < ActionDispatch::IntegrationT
         "user" => { "guid" => "embedded-user", "time_zone" => "UTC", "language" => "en" },
         "tenant" => { "id" => 88 }
       }) do
-        post omnya_connector.module_context_url, params: {
+        post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
           module_context: {
             token: "token-embedded-b",
-            context_endpoint: "https://host.example.test/external_modules/context",
-            module_key: Rails.application.config.x.omnya_connector.module_key
+            context_endpoint: "https://host.example.test/external_modules/context"
           }
         }
       end

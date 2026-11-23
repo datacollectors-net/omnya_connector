@@ -6,12 +6,11 @@ module OmnyaConnector
     # avoids 422 failures when third-party cookies are restricted and the session cookie
     # cannot be round-tripped with the CSRF token.
     skip_forgery_protection
+    before_action :validate_module_key!
 
     def create
-      payload = params.expect(module_context: [ :token, :context_endpoint, :module_key ])
+      payload = params.expect(module_context: [ :token, :context_endpoint ])
       log_host_context_state(event: "module_context.create.received")
-
-      return render_invalid_module_key unless payload[:module_key] == omnya_connector_module_key
 
       context = OmnyaConnector::HostContextFetcher.call(
         token: payload[:token],
@@ -60,6 +59,10 @@ module OmnyaConnector
     end
 
     private
+
+    def validate_module_key!
+      render_invalid_module_key unless params[:module_key] == omnya_connector_module_key
+    end
 
     def render_invalid_module_key
       clear_host_context_session!

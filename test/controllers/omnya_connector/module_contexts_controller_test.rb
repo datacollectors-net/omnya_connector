@@ -10,11 +10,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     }
 
     with_stubbed_host_context(context_payload) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-1",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -36,11 +35,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
   end
 
   test "rejects invalid module key" do
-    post omnya_connector.module_context_url, params: {
+    post omnya_connector.module_context_url(module_key: "wrong-key"), params: {
       module_context: {
         token: "token-1",
-        context_endpoint: "https://host.example.test/external_modules/context",
-        module_key: "wrong-key"
+        context_endpoint: "https://host.example.test/external_modules/context"
       }
     }
 
@@ -50,11 +48,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
   test "returns unauthorized for fetch errors with unauthorized message" do
     with_stubbed_host_context_error("unauthorized") do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-expired",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -65,11 +62,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
 
   test "returns unprocessable entity for other fetch errors" do
     with_stubbed_host_context_error("context_request_failed") do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-1",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -84,11 +80,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     }
 
     with_stubbed_host_context(context_payload) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-1",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -104,19 +99,25 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     }
 
     with_stubbed_host_context(context_payload) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-2",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
 
     assert_response :no_content
 
-    delete omnya_connector.module_context_url
+    delete omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key)
     assert_response :no_content
+  end
+
+  test "destroy rejects invalid module key" do
+    delete omnya_connector.module_context_url(module_key: "wrong-key")
+
+    assert_response :unauthorized
+    assert_equal "invalid_module_key", response.parsed_body["error"]
   end
 
   test "re-sync with new tenant immediately replaces stored tenant context" do
@@ -124,11 +125,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "switch-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
       "tenant" => { "id" => 700 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-switch-a",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -140,11 +140,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "switch-user", "time_zone" => "UTC", "language" => "en" },
       "tenant" => { "id" => 900 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-switch-b",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -170,11 +169,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
       "tenant" => { "id" => 321 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-same-a",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -186,11 +184,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
       "tenant" => { "id" => 321 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-same-b",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -204,11 +201,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "same-user", "time_zone" => "UTC", "language" => "en" },
       "tenant" => { "id" => 321 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-locale-a",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -220,11 +216,10 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
       "user" => { "guid" => "same-user", "time_zone" => "Europe/Amsterdam", "language" => "nl" },
       "tenant" => { "id" => 321 }
     }) do
-      post omnya_connector.module_context_url, params: {
+      post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key), params: {
         module_context: {
           token: "token-locale-b",
-          context_endpoint: "https://host.example.test/external_modules/context",
-          module_key: Rails.application.config.x.omnya_connector.module_key
+          context_endpoint: "https://host.example.test/external_modules/context"
         }
       }
     end
@@ -236,22 +231,21 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
   # ── ModuleContextsController CSRF bypass (skip_forgery_protection) ─────────
   #
   # ModuleContextsController unconditionally skips CSRF. These tests verify the
-  # 0.5.0 regression: POST /module_context must not 422 when Origin is the module's
+  # 0.5.0 regression: POST /modules/:module_key/module_context must not 422 when Origin is the module's
   # own base URL (same-origin iframe request) or absent — scenarios where third-party
   # cookie restrictions cause the CSRF token to be unverifiable.
 
-  test "POST /module_context succeeds without CSRF token when Origin is module base URL" do
+  test "POST with valid module path succeeds without CSRF token when Origin is module base URL" do
     # Regression test for 0.5.0: Origin == module base_url caused trusted_embedded_origin_request?
     # to return false, so CSRF was enforced. With skip_forgery_protection the endpoint no longer
     # depends on CSRF at all. http://www.example.com is the base_url Rails uses in integration tests.
     with_embedded_csrf_enforcement do
       with_stubbed_host_context({ "user" => { "guid" => "u-reg-1" }, "tenant" => { "id" => 10 } }) do
-        post omnya_connector.module_context_url,
+        post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key),
           params: {
             module_context: {
               token: "t",
-              context_endpoint: "https://host.example.test/external_modules/context",
-              module_key: Rails.application.config.x.omnya_connector.module_key
+              context_endpoint: "https://host.example.test/external_modules/context"
             }
           },
           headers: { "Origin" => "http://www.example.com" }
@@ -260,15 +254,14 @@ class OmnyaConnector::ModuleContextsControllerTest < ActionDispatch::Integration
     end
   end
 
-  test "POST /module_context succeeds without CSRF token and no origin signals" do
+  test "POST with valid module path succeeds without CSRF token and no origin signals" do
     with_embedded_csrf_enforcement do
       with_stubbed_host_context({ "user" => { "guid" => "u-reg-2" }, "tenant" => { "id" => 20 } }) do
-        post omnya_connector.module_context_url,
+        post omnya_connector.module_context_url(module_key: Rails.application.config.x.omnya_connector.module_key),
           params: {
             module_context: {
               token: "t",
-              context_endpoint: "https://host.example.test/external_modules/context",
-              module_key: Rails.application.config.x.omnya_connector.module_key
+              context_endpoint: "https://host.example.test/external_modules/context"
             }
           }
         assert_response :no_content

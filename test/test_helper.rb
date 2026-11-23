@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] = "test"
+ENV["MODULE_KEY"] = "test-module"
 require_relative "dummy/config/environment"
 require "rails/test_help"
 

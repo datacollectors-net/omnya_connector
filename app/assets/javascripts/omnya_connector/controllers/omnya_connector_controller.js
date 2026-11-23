@@ -46,8 +46,8 @@ function setEmbeddedHostOrigin(origin) {
 }
 
 // If the engine is mounted at a prefix (e.g. mount OmnyaConnector::Engine => "/my_prefix"),
-// adjust this path accordingly (e.g. "/my_prefix/module_context").
-const MODULE_CONTEXT_PATH = "/module_context"
+// adjust this path prefix accordingly (e.g. "/my_prefix").
+const MODULES_PATH_PREFIX = ""
 
 export default class extends Controller {
   static values = {
@@ -385,7 +385,8 @@ export default class extends Controller {
         ? { [EMBEDDED_HOST_ORIGIN_HEADER]: this.activeHostOrigin }
         : {}
 
-      const response = await fetch(MODULE_CONTEXT_PATH, {
+      const moduleKey = encodeURIComponent(this.moduleKeyValue)
+      const response = await fetch(`${MODULES_PATH_PREFIX}/modules/${moduleKey}/module_context`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -397,8 +398,7 @@ export default class extends Controller {
         body: JSON.stringify({
           module_context: {
             token: this.token,
-            context_endpoint: this.contextEndpoint,
-            module_key: this.moduleKeyValue
+            context_endpoint: this.contextEndpoint
           }
         })
       })

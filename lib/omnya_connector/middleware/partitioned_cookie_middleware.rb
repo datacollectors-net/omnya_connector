@@ -6,7 +6,7 @@ module OmnyaConnector
   # the browser has third-party cookie blocking enabled (Chrome 120+, Safari).
   #
   # Without this, the browser silently discards SameSite=None session cookies set
-  # by /module_context, so subsequent requests to Rails controllers arrive with no
+  # by /modules/:module_key/module_context, so subsequent requests to Rails controllers arrive with no
   # session and resolve to autonomous/development fallback values.
   class PartitionedCookieMiddleware
     def initialize(app)

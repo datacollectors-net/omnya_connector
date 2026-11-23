@@ -6,7 +6,7 @@ Rails engine for iframe-embedded modules that communicate with a host applicatio
 
 - **Host context management** — Receives token and context endpoint from the host via `postMessage`, fetches user/tenant context, persists it in the Rails session
 - **Autonomous mode** — Operates standalone in development with configurable `user_guid` and `tenant_id`
-- **CSRF-safe iframe embedding** — `SameSite=None` session cookies; `POST /module_context` unconditionally skips CSRF (protected by module-key + context-endpoint origin validation instead); Turbo/fetch and same-origin XHR write requests from within the module iframe are trusted when the Stimulus controller injects `X-Omnya-Embedded-Host-Origin` with a postMessage-established trusted host origin (guarded by `allow_trusted_origin_csrf_bypass`)
+- **CSRF-safe iframe embedding** — `SameSite=None` session cookies; `POST /modules/:module_key/module_context` unconditionally skips CSRF (protected by module-key + context-endpoint origin validation instead); Turbo/fetch and same-origin XHR write requests from within the module iframe are trusted when the Stimulus controller injects `X-Omnya-Embedded-Host-Origin` with a postMessage-established trusted host origin (guarded by `allow_trusted_origin_csrf_bypass`)
 - **CHIPS support** — The engine inserts `OmnyaConnector::PartitionedCookieMiddleware`, which adds the `Partitioned` attribute to the session cookie so it survives third-party cookie blocking (Chrome 120+, Safari) in cross-origin iframes
 - **Param-based context fallback** — When third-party cookie restrictions keep the session from round-tripping, embedded forms can carry hidden `context_user_guid` / `context_tenant_id` fields (rendered via the `host_context_params` helper or the bundled `_host_context_fields` partial) to re-establish the host context on submit
 - **Development guard fallback** — In development only, `require_host_context!` falls back to autonomous dev defaults for embedded requests without session context instead of redirect-looping (`ERR_TOO_MANY_REDIRECTS`) when the handshake cookie does not round-trip in the host iframe
@@ -117,7 +117,7 @@ Third-party cookie restrictions in modern browsers mean that the session cookie 
 
 The connector handles this with two complementary mechanisms:
 
-**1. `POST /module_context` — unconditional `skip_forgery_protection`**
+**1. `POST /modules/:module_key/module_context` — unconditional `skip_forgery_protection`**
 
 The context-sync endpoint has its own application-level security (module-key validation and context-endpoint origin checked against `host_app_origins`), so CSRF provides no additional protection. Skipping it avoids 422 failures during the periodic host context refresh when cookies are restricted.
 
@@ -226,7 +226,7 @@ Optional status panel targets: `connectionStatus`, `contextStatus`, `userLogin`,
 
 #### Embedded host origin header
 
-Once the postMessage handshake with the host completes and `activeHostOrigin` is established, the controller automatically injects an `X-Omnya-Embedded-Host-Origin` header on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event), on same-origin `XMLHttpRequest` requests (e.g. ActiveStorage DirectUploads, which bypass Turbo), and on the `POST /module_context` call. This header carries the trusted host origin and is used by `trusted_embedded_origin_request?` on the server to bypass CSRF verification for embedded write actions when third-party cookie restrictions make normal CSRF token matching impossible. The header is only injected when the origin is in `host_app_origins`, so it is never sent for untrusted origins, and cross-origin XHR requests are left untouched to avoid triggering CORS preflights.
+Once the postMessage handshake with the host completes and `activeHostOrigin` is established, the controller automatically injects an `X-Omnya-Embedded-Host-Origin` header on every Turbo-driven fetch request (via the `turbo:before-fetch-request` event), on same-origin `XMLHttpRequest` requests (e.g. ActiveStorage DirectUploads, which bypass Turbo), and on the `POST /modules/:module_key/module_context` call. This header carries the trusted host origin and is used by `trusted_embedded_origin_request?` on the server to bypass CSRF verification for embedded write actions when third-party cookie restrictions make normal CSRF token matching impossible. The header is only injected when the origin is in `host_app_origins`, so it is never sent for untrusted origins, and cross-origin XHR requests are left untouched to avoid triggering CORS preflights.
 
 #### Handshake target-origin behavior
 
@@ -240,7 +240,7 @@ Navigation reports (`external-module:navigate`) are suppressed until the host ha
 
 After each successful context sync, the controller persists the host context server-side and compares a fingerprint of `user.guid` + `tenant.id` with the last synced value stored in `sessionStorage`.
 
-`POST /module_context` also returns `X-Omnya-Context-Changed` (`1`/`0`) and `X-Omnya-Context-Fingerprint` headers. The controller uses these signals together with a persisted fingerprint guard and only reloads when the effective fingerprint changes.
+`POST /modules/:module_key/module_context` also returns `X-Omnya-Context-Changed` (`1`/`0`) and `X-Omnya-Context-Fingerprint` headers. The controller uses these signals together with a persisted fingerprint guard and only reloads when the effective fingerprint changes.
 
 - If the fingerprint changed (for example, the host tenant switched), the page is reloaded immediately so all server-rendered and cached data is refreshed under the new tenant context.
 - If the fingerprint is unchanged, no reload is triggered, which avoids reload loops during periodic refreshes.
@@ -324,7 +324,7 @@ The engine is designed to be mounted at root:
 mount OmnyaConnector::Engine => "/"
 ```
 
-If mounted at a prefix (e.g. `"/omnya_connector"`), update the `MODULE_CONTEXT_PATH` constant in the Stimulus controller JS accordingly.
+If mounted at a prefix (e.g. `"/omnya_connector"`), update the `MODULES_PATH_PREFIX` constant in the Stimulus controller JS accordingly.
 
 ## Engine initializers
 
